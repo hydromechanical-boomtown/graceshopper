@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const RECIEVED_PUPPIES = 'RECIEVED_PUPPIES'
+const RECEIVED_PUPPIES = 'RECEIVED_PUPPIES'
 const SELECT_PUPPY = 'SELECT_PUPPY'
 
-const recivedPuppies = puppyList => ({
-  type: RECIEVED_PUPPIES,
+const receivedPuppies = puppyList => ({
+  type: RECEIVED_PUPPIES,
   puppyList
 })
 
@@ -16,7 +16,7 @@ const selectPuppy = puppy => ({
 export const fetchPuppies = () => async dispatch => {
   const response = await axios.get('api/puppies')
   const puppyList = response.data
-  dispatch(recivedPuppies(puppyList))
+  dispatch(receivedPuppies(puppyList))
 }
 
 export const fetchSinglePuppy = id => async dispatch => {
@@ -28,7 +28,7 @@ const initalState = []
 
 const puppyReducer = function(state = initalState, action) {
   switch (action.type) {
-    case RECIEVED_PUPPIES:
+    case RECEIVED_PUPPIES:
       return action.puppyList
 
     case SELECT_PUPPY:
