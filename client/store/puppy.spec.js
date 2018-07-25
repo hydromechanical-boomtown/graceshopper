@@ -44,7 +44,7 @@ describe('thunk creators', () => {
       mockAxios.onGet('api/puppies').replyOnce(200, puppyList)
       await store.dispatch(fetchPuppies())
       const actions = store.getActions()
-      expect(actions[0].type).to.be.equal('RECIEVED_PUPPIES')
+      expect(actions[0].type).to.be.equal('RECEIVED_PUPPIES')
       // expect(history.location.pathname).to.be.equal('/login')
     })
 
