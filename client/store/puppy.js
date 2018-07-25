@@ -28,7 +28,7 @@ const initalState = []
 
 const puppyReducer = function(state = initalState, action) {
   switch (action.type) {
-    case RECIVED_PUPPIES:
+    case RECIEVED_PUPPIES:
       return action.puppyList
 
     case SELECT_PUPPY:
