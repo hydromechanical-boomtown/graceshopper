@@ -35,6 +35,10 @@ const Puppy = db.define('puppy', {
   imageURL: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  sold: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
