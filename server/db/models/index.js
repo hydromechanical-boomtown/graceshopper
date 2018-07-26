@@ -9,6 +9,8 @@ const Puppy = require('./puppy')
  */
 User.hasMany(Puppy)
 Puppy.belongsTo(User)
+Cart.belongsTo(User)
+User.hasOne(Cart)
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -18,5 +20,6 @@ Puppy.belongsTo(User)
  */
 module.exports = {
   Puppy,
-  User
+  User,
+  Cart
 }
