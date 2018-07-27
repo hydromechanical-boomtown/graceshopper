@@ -6,26 +6,35 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
+import store from '../store'
+import {removeItem, fetchCart} from '../store/cart'
+import {fetchPuppies} from '../store/puppy'
 
 const dummyPuppies = [
   {id: 1, name: 'Dog', price: 300},
   {id: 2, name: 'Harold', price: 300},
   {id: 3, name: 'David', price: 300}
 ]
-//assuming that the current user (who has a user.cart) is accessible on the store, also assuming that all the puppies are also accessible on the store, but only the ones that arent sold
-//what I want to do is get the user from state, access its cart and get all of the IDs for what is currently in the cart --> then I want to loop through the current state which is holding all the available dogs and return the objects for the dogs that are available in cart
-// Then I want to store these dogs on the components state
-export class Cart extends Component {
-  constructor() {
-    super()
-    this.state = {
-      puppies: dummyPuppies
-    }
 
-    //usually won't have a state, but its here so we can use dummy data --> usually will retrieve from props
+class CartComponent extends Component {
+  constructor(props) {
+    super(props)
+    this.removeFromCart = this.removeFromCart.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.fetchPuppies()
+    this.props.fetchCart()
+  }
+
+  removeFromCart(id) {
+    console.log('clicked!!')
+    store.dispatch(removeItem(id))
   }
   render() {
+    console.log(this.props)
     return (
       <Paper>
         <Table>
@@ -37,13 +46,23 @@ export class Cart extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.puppies.map(puppy => {
+            {this.props.puppies.map(puppy => {
               return (
                 <TableRow key={puppy.id}>
                   <TableCell component="th" scope="row">
                     {puppy.name}
                   </TableCell>
-                  <TableCell> Remove button goes here </TableCell>
+                  <TableCell>
+                    {' '}
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => {
+                        this.removeFromCart(puppy.id)
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>{' '}
+                  </TableCell>
                   <TableCell numeric>{puppy.price}</TableCell>
                 </TableRow>
               )
@@ -55,16 +74,19 @@ export class Cart extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    puppies: state.user.cart.map(id => {
-      return state.puppies.filter(puppy => {
-        return puppy.id === id
-      })
-    }),
-    cart: this.state.user.cart || this.state.cart
-    //I did the above because I just realised that guests also need to be able to checkout so I guess we should have an action that if someone adds a puppy to cart then it puts to the user if they are a user, otherwise it changes cart on state --> and when a new user is created then maybe what happens is that it checks if the cart exists, and if so it creates a user with the cart that is already on the sessions state
-  }
-}
+const mapStateToProps = state => ({
+  puppies: state.cart.map(id => {
+    return state.puppies.filter(puppy => {
+      console.log(puppy)
+      return puppy.id === id
+    })
+  }),
+  cart: state.cart
+})
 
-export default connect(mapStateToProps)(Cart)
+const mapDispatchToProps = dispatch => ({
+  fetchPuppies: () => dispatch(fetchPuppies()),
+  fetchCart: () => dispatch(fetchCart())
+})
+
+export const Cart = connect(mapStateToProps, mapDispatchToProps)(CartComponent)

@@ -9,4 +9,3 @@ export {Login, Signup} from './auth-form'
 export {Cart} from './cart-table'
 export {PuppyList} from './PuppyList'
 export {singlePuppyListItem} from './singlePuppyListItem'
-
