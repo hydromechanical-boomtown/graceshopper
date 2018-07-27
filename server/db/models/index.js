@@ -1,6 +1,7 @@
 const User = require('./user')
 const Puppy = require('./puppy')
 const Cart = require('./cart')
+const Guest = require("./guest")
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -12,6 +13,10 @@ User.hasMany(Puppy)
 Puppy.belongsTo(User)
 Cart.belongsTo(User)
 User.hasOne(Cart)
+Guest.hasMany(Puppy)
+Puppy.belongsTo(Guest)
+
+
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -22,5 +27,6 @@ User.hasOne(Cart)
 module.exports = {
   Puppy,
   User,
-  Cart
+  Cart,
+  Guest
 }
