@@ -22,7 +22,7 @@ const getCart = cart => ({
 })
 
 //fetching the cart for a logged in user from the db
-export const fetchCart = async dispatch => {
+export const fetchCart = () => async dispatch => {
   const res = await axios.get('api/user/cart')
   const cart = res.data
   dispatch(getCart(cart))
