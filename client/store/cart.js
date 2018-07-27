@@ -29,7 +29,7 @@ export const fetchCart = async dispatch => {
 }
 
 const initialState = []
-export const cartReducer = function(state = initialState, action) {
+const cartReducer = function(state = initialState, action) {
   switch (action.type) {
     case ADD_ITEM:
       return [...state, action.id]
@@ -44,3 +44,5 @@ export const cartReducer = function(state = initialState, action) {
       return state
   }
 }
+
+export default cartReducer
