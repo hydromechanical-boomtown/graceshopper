@@ -3,28 +3,45 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <h1>BOILERMAKER</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
+    <div>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="title" color="inherit">
+            Puppy Store
+          </Typography>
+          <div>
+            <Link to="/login" style={{color: 'white'}}>
+              <Button color="inherit">Login</Button>
+            </Link>
+            <Link to="/signup" style={{color: 'white'}}>
+              <Button color="inherit">Sign Up</Button>
+            </Link>
+          </div>
+          <Link to="/puppies" style={{color: 'white'}}>
+            <Button color="inherit">Puppies</Button>
+          </Link>
+          <div>
+            <Link to="/home" style={{color: 'white'}}>
+              <Button color="inherit">Home</Button>
+            </Link>
+            <Link to="/cart">
+              <IconButton color="primary" aria-label="Add to shopping cart">
+                <AddShoppingCartIcon />
+              </IconButton>
+            </Link>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </div>
   </div>
 )
 
