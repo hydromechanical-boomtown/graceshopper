@@ -41,15 +41,17 @@ class Form extends Component {
           onChange={this.handleChange}
           name="lname"
         />
-        <TextField
-          required
-          id="required"
-          label="Required"
-          defaultValue="Email"
-          margin="normal"
-          onChange={this.handleChange}
-          name="email"
-        />
+        {this.props.user && (
+          <TextField
+            required
+            id="required"
+            label="Required"
+            defaultValue="Email"
+            margin="normal"
+            onChange={this.handleChange}
+            name="email"
+          />
+        )}
         <TextField
           required
           id="required"
