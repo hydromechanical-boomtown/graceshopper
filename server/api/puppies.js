@@ -37,3 +37,22 @@ router.put('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.post('/', async (req, res, next) => {
+  try {
+    const newPuppy = await Puppy.create(req.body)
+    res.status(201).json(newPuppy)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.delete('/:puppyId', async (req, res, next) => {
+  try {
+    const puppy = await Puppy.findById(req.params.puppyId)
+    await puppy.destroy()
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
