@@ -15,9 +15,14 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="title" color="inherit">
-            Puppy Store
-          </Typography>
+          <Link to="/home" style={{color: 'white'}}>
+            <Button color="inherit">
+              {' '}
+              <Typography variant="title" color="inherit">
+                Puppy Store
+              </Typography>
+            </Button>
+          </Link>
           <div>
             <Link to="/login" style={{color: 'white'}}>
               <Button color="inherit">Login</Button>
@@ -30,13 +35,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             <Button color="inherit">Puppies</Button>
           </Link>
           <div>
-            <Link to="/home" style={{color: 'white'}}>
-              <Button color="inherit">Home</Button>
-            </Link>
-            <Link to="/cart">
-              <IconButton color="primary" aria-label="Add to shopping cart">
-                <AddShoppingCartIcon />
-              </IconButton>
+            <Link to="/cart" style={{color: 'white'}}>
+              <Button color="inherit">Cart</Button>
             </Link>
           </div>
         </Toolbar>
