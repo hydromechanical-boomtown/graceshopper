@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Puppy} = require('../server/db/models')
+const {User, Puppy, Guest, Cart} = require('../server/db/models')
 
 /**
  * Welcome to the seed file! This seed file uses a newer language feature called...
@@ -48,6 +48,42 @@ async function seed() {
       firstName: 'Corina',
       lastName: 'Diez',
       address: '900 Waffle Rd, Vermont'
+    })
+  ])
+
+  const guests = await Promise.all([
+    Guest.create({
+      email: 'shmody@email.com',
+      firstName: 'Julian',
+      lastName: 'Kong',
+      address: '1400 River Rd, Virgina'
+    }),
+    Guest.create({
+      email: 'shmurphy@email.com',
+      firstName: 'Ellen',
+      lastName: 'Baker',
+      address: '121 Kanga Way, California'
+    }),
+    Guest.create({
+      email: 'chuckles@email.com',
+      firstName: 'Charlie',
+      lastName: 'Quinn',
+      address: '7a Clyde St, Colorado'
+    }),
+    Guest.create({
+      email: 'boooo@email.com',
+      firstName: 'Ghost',
+      lastName: 'Casper',
+      address: '900 Waffle Rd, Vermont'
+    })
+  ])
+
+  const carts = await Promise.all([
+    Cart.create({
+      puppies: [1, 2, 3]
+    }),
+    Cart.create({
+      puppies: [1, 3]
     })
   ])
 
@@ -120,6 +156,9 @@ async function seed() {
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${puppies.length} puppies`)
+
+  console.log(`seeded ${guests.length} guests`)
+
   console.log(
     'added puppies using User.addPuppy(puppy) sequelize accessor methods'
   )
