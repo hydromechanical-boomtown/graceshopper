@@ -47,26 +47,30 @@ class CartComponent extends Component {
           </TableHead>
           <TableBody>
             {this.props.puppies.map(puppy => {
+              console.log('PUPPY IS ', puppy)
               return (
-                <TableRow key={puppy.id}>
+                <TableRow key={puppy[0].id}>
                   <TableCell component="th" scope="row">
-                    {puppy.name}
+                    {puppy[0].name}
                   </TableCell>
                   <TableCell>
                     {' '}
                     <IconButton
                       aria-label="Delete"
                       onClick={() => {
-                        this.removeFromCart(puppy.id)
+                        this.removeFromCart(puppy[0].id)
                       }}
                     >
                       <DeleteIcon />
                     </IconButton>{' '}
                   </TableCell>
-                  <TableCell numeric>{puppy.price}</TableCell>
+                  <TableCell numeric>{puppy[0].price}</TableCell>
                 </TableRow>
               )
             })}
+            <TableRow>
+              <TableCell numeric>Total: {this.props.total}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </Paper>
@@ -74,16 +78,28 @@ class CartComponent extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  puppies: state.cart.map(id => {
+const mapStateToProps = state => {
+  const puppiesInCart = state.cart.map(id => {
     return state.puppies.filter(puppy => {
       console.log(puppy)
       return puppy.id === id
     })
-  }),
-  cart: state.cart
-})
+  })
 
+  let total = 0
+  console.log('PUPPIES IN CART ARE', puppiesInCart)
+  puppiesInCart.forEach(elem => {
+    console.log('ELEM.PRICE is', elem[0].price)
+    total += elem[0].price
+  })
+  console.log('TOTAL IS:', total)
+
+  return {
+    puppies: puppiesInCart,
+    cart: state.cart,
+    total
+  }
+}
 const mapDispatchToProps = dispatch => ({
   fetchPuppies: () => dispatch(fetchPuppies()),
   fetchCart: () => dispatch(fetchCart())
