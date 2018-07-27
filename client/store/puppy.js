@@ -5,7 +5,7 @@ const SELECT_PUPPY = 'SELECT_PUPPY'
 const SELL_PUPPY = 'UPDATE_PUPPY'
 const DELETE_PUPPY = 'DELETE_PUPPY'
 
-const receivedPuppies = puppyList => ({
+export const receivedPuppies = puppyList => ({
   type: RECEIVED_PUPPIES,
   puppyList
 })
@@ -38,7 +38,9 @@ export const fetchSinglePuppy = id => async dispatch => {
 }
 const initialState = []
 
+
 const puppyReducer = function(state = initialState, action) {
+
   switch (action.type) {
     case RECEIVED_PUPPIES:
       return action.puppyList
