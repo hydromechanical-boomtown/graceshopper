@@ -7,8 +7,21 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Divider from '@material-ui/core/Divider'
+const style = {
+  progress: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '10%'
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%'
+  }
+}
 
 class SinglePuppy extends Component {
   componentDidMount() {
@@ -16,16 +29,29 @@ class SinglePuppy extends Component {
   }
   render() {
     const props = this.props
-    return (
+    return !props.puppy ? (
+      <CircularProgress size={100} style={style.progress} />
+    ) : (
       <Card>
-        <img src={props.puppy.imageURL} />
-        <CardContent>
-          <Typography variant="headline" component="h2">
-            {props.puppy.name}
+        <CardMedia
+          style={style.media}
+          image={props.puppy.imageURL}
+          title={props.puppy.name}
+        />
+        <CardContent align="left">
+          <Typography variant="display2">{props.puppy.name}</Typography>
+          <Typography variant="caption">{props.puppy.description}</Typography>
+          <Typography component="p">
+            Age: {props.puppy.age}
+            <br />
+            Breed: {props.puppy.breed}
+            <br />
+            Price: ${props.puppy.price}
+            <br />
+            Gender: {props.puppy.gender}
           </Typography>
-          <Typography component="p">Breed: {props.puppy.breed}</Typography>
-          <Typography component="p">Age: {props.puppy.age}</Typography>
         </CardContent>
+        <Divider />
         <CardActions>
           <IconButton color="primary" aria-label="Add to shopping cart">
             <AddShoppingCartIcon />
@@ -41,7 +67,7 @@ const mapState = (state, ownProps) => {
     return puppy.id === Number(ownProps.match.params.puppyId)
   })
   return {
-    puppy: foundPuppy || {}
+    puppy: foundPuppy
   }
 }
 const mapDispatch = (dispatch, ownProps) => ({
