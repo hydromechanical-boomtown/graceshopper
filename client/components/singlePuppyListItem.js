@@ -47,6 +47,7 @@ export default class SinglePuppyListItem extends Component {
           </Typography>
           <Typography component="p">Breed: {this.props.puppy.breed}</Typography>
           <Typography component="p">Age: {this.props.puppy.age}</Typography>
+          <Typography component="p">Price: {this.props.puppy.price}</Typography>
         </CardContent>
         <CardActions>
           {!this.state.isDisabled ? (
