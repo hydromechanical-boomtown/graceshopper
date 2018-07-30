@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import { GoogleLogin } from 'react-google-login-component'
+
 /**
  * COMPONENT
  */
@@ -34,37 +34,6 @@ const AuthForm = props => {
   )
 }
 
-class Login1 extends React.Component{
- 
-  constructor (props, context) {
-    super(props, context);
-  }
- 
-  responseGoogle (googleUser) {
-    var id_token = googleUser.getAuthResponse().id_token;
-    var googleId = googleUser.getId();
-    
-    console.log({ googleId });
-    console.log({accessToken: id_token});
-    //anything else you want to do(save to localStorage)...
-  }
- 
-  render () {
-    return (
-      <div>
-        <GoogleLogin socialId="yourClientID"
-                     className="google-login"
-                     scope="profile"
-                     fetchBasicProfile={false}
-                     responseHandler={this.responseGoogle}
-                     buttonText="Login With Google"/>
-      </div>
-    );
-  }
- 
-}
- 
-export default Login1;
 /**
  * CONTAINER
  *   Note that we have two different sets of 'mapStateToProps' functions -
