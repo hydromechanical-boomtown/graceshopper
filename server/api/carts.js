@@ -12,6 +12,7 @@ router.get('/', async (req, res, next) => {
     if (cart) {
       res.status(200).json(cart)
     } else {
+      // cart could also be created only if a user logs out and there are items left in the cart
       cart = await Cart.create()
       cart.setUser(user)
       res.status(201).json(cart)

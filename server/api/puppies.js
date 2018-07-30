@@ -38,6 +38,7 @@ router.put('/', async (req, res, next) => {
   }
 })
 
+// protect these post and delete routes so people can't mess with your inventory
 router.post('/', async (req, res, next) => {
   try {
     const newPuppy = await Puppy.create(req.body)
