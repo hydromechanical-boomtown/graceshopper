@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {fetchPuppies} from '../store/puppy'
-import {SinglePuppyListItem} from './singlePuppyListItem'
+import SinglePuppyListItem from './singlePuppyListItem'
 
 class PuppyList extends Component {
   componentDidMount() {
