@@ -53,7 +53,7 @@ describe('thunk creators', () => {
       mockAxios.onGet('api/puppies/1').replyOnce(200, puppy)
       await store.dispatch(fetchSinglePuppy(1))
       const actions = store.getActions()
-      expect(actions[0].type).to.be.equal('SELECT_PUPPY')
+      expect(actions[0].type).to.be.equal('GET_PUPPY')
       // expect(history.location.pathname).to.be.equal('/login')
     })
   })
