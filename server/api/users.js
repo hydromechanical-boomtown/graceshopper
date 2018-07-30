@@ -18,9 +18,9 @@ router.get('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const user = await User.findById(req.body.userId)
-    await user.update(req.body)
-    res.sendStatus(202)
+    const user = await User.findById(req.body.id)
+    const updatedUser = await user.update(req.body)
+    res.status(202).send(updatedUser)
   } catch (err) {
     next(err)
   }
