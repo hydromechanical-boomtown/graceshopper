@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const Navbar = ({handleClick, isLoggedIn, name}) => (
   <div>
     <div>
       <AppBar position="static">
@@ -23,14 +23,28 @@ const Navbar = ({handleClick, isLoggedIn}) => (
               </Typography>
             </Button>
           </Link>
-          <div>
-            <Link to="/login" style={{color: 'white'}}>
-              <Button color="inherit">Login</Button>
-            </Link>
-            <Link to="/signup" style={{color: 'white'}}>
-              <Button color="inherit">Sign Up</Button>
-            </Link>
-          </div>
+          {!isLoggedIn && (
+            <div>
+              <Link to="/login" style={{color: 'white'}}>
+                <Button color="inherit">Login</Button>
+              </Link>
+              <Link to="/signup" style={{color: 'white'}}>
+                <Button color="inherit">Sign Up</Button>
+              </Link>
+            </div>
+          )}
+          {isLoggedIn && (
+            <React.Fragment>
+              <div>
+                <p>Hi, {name}</p>
+              </div>
+              <Link to="/logout" style={{color: 'white'}}>
+                <Button color="inherit" onClick={handleClick}>
+                  Log Out
+                </Button>
+              </Link>
+            </React.Fragment>
+          )}
           <Link to="/puppies" style={{color: 'white'}}>
             <Button color="inherit">Puppies</Button>
           </Link>
@@ -50,7 +64,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    name: state.user.firstName
   }
 }
 
