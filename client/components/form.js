@@ -2,27 +2,33 @@ import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
 import TextField from '@material-ui/core/TextField'
+import StripeCheckout from 'react-stripe-checkout';
 
 class Form extends Component {
-  constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+
+  onToken = (token) => {
+    fetch('/save-stripe-token', {
+      method: 'POST',
+      body: JSON.stringify(token),
+    }).then(response => {
+      response.json().then(data => {
+        alert(`We are in business, ${data.email}`);
+      });
+    });
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
-
-  handleSubmit(event) {
-    this.preventDefault()
-  }
+  // ...
 
   render() {
-    return (
-      <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+   return (
+    
+      // <StripeCheckout
+      //   token={this.onToken}
+      //   stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
+      // />
+    
+    <div>
+           <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
         <TextField
           required
           id="required"
@@ -40,8 +46,8 @@ class Form extends Component {
           margin="normal"
           onChange={this.handleChange}
           name="lname"
-        />
-        {this.props.user && (
+     />
+       {this.props.user && (
           <TextField
             required
             id="required"
@@ -50,9 +56,8 @@ class Form extends Component {
             margin="normal"
             onChange={this.handleChange}
             name="email"
-          />
-        )}
-        <TextField
+          /> )}
+         <TextField
           required
           id="required"
           label="Required"
@@ -61,12 +66,19 @@ class Form extends Component {
           onChange={this.handleChange}
           name="address"
         />
-        <Button variant="contained" color="primary" type="submit">
-          Checkout
-        </Button>
-      </form>
-    )
+ </form>
+ 
+  <StripeCheckout
+  token={this.onToken}
+  stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
+  amount = {this.props.total}
+/>
+</div>
+
+   )
+   
   }
+  
 }
 
 const mapState = state => ({
