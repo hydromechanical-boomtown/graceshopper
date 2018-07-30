@@ -23,7 +23,7 @@ const getCart = cart => ({
 
 //fetching the cart for a logged in user from the db
 export const fetchCart = () => async dispatch => {
-  const res = await axios.get('api/user/cart')
+  const res = await axios.get('api/carts')
   const cart = res.data
   dispatch(getCart(cart))
 }
@@ -38,7 +38,7 @@ const cartReducer = function(state = initialState, action) {
       return state.filter(item => item !== action.id)
 
     case GET_CART:
-      return action.cart
+      return action.cart.puppies
 
     default:
       return state
