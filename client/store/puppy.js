@@ -20,8 +20,8 @@ const sellPuppyAction = puppyId => ({
   puppyId
 })
 
-export const sellPuppy = (puppyId, ownerId) => async dispatch => {
-  const response = await axios.put('api/puppies', {puppyId, ownerId})
+export const sellPuppy = (puppyId, ownerId, isUser) => async dispatch => {
+  const response = await axios.put('api/puppies', {puppyId, ownerId, isUser})
   const soldPuppy = response.data
   dispatch(sellPuppyAction(soldPuppy.id))
 }
