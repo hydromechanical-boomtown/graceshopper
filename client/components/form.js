@@ -64,7 +64,7 @@ class Form extends Component {
         </form>
 
         <StripeCheckout
-          token={this.onToken}
+          // token={this.onToken}
           stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
           amount={this.props.total * 100}
         />
