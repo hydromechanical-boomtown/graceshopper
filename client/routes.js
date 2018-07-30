@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, Cart, ConnectedForm} from './components'
 import PuppyList from './components/PuppyList'
 import {me} from './store'
-import {SinglePuppyListItem} from './components/singlePuppyListItem'
+import SinglePuppy from './components/SinglePuppy'
 
 /**
  * COMPONENT
@@ -25,8 +25,8 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/puppies" component={PuppyList} />
+        <Route exact path="/puppies/:puppyId" component={SinglePuppy} />
         <Route exact path="/cart/checkout" component={ConnectedForm} />
-        <Route exact path="/puppies/:puppyId" component={SinglePuppyListItem} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
