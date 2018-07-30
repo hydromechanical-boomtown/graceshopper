@@ -23,7 +23,6 @@ export default class SinglePuppyListItem extends Component {
   }
 
   removeFromCart(id) {
-    console.log('clicked!!')
     store.dispatch(removeItem(id))
     this.setState({
       isDisabled: false

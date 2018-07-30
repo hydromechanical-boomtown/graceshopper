@@ -5,7 +5,6 @@ import SinglePuppyListItem from './singlePuppyListItem'
 
 class PuppyList extends Component {
   componentDidMount() {
-    console.log('mounted')
     this.props.fetchPuppies()
   }
 
