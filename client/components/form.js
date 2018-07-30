@@ -6,26 +6,8 @@ import StripeCheckout from 'react-stripe-checkout';
 
 class Form extends Component {
 
-  onToken = (token) => {
-    fetch('/save-stripe-token', {
-      method: 'POST',
-      body: JSON.stringify(token),
-    }).then(response => {
-      response.json().then(data => {
-        alert(`We are in business, ${data.email}`);
-      });
-    });
-  }
-
-  // ...
-
   render() {
    return (
-    
-      // <StripeCheckout
-      //   token={this.onToken}
-      //   stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
-      // />
     
     <div>
            <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
@@ -71,7 +53,7 @@ class Form extends Component {
   <StripeCheckout
   token={this.onToken}
   stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
-  amount = {this.props.total}
+  amount = {this.props.total*100}
 />
 </div>
 
@@ -80,9 +62,29 @@ class Form extends Component {
   }
   
 }
+const mapStateToProps = state => {
+  const puppiesInCart = state.cart.map(id => {
+    return state.puppies.filter(puppy => {
+      console.log(puppy)
+      return puppy.id === id
+    })
+  })
 
-const mapState = state => ({
-  user: state.user
-})
+  let total = 0
+  console.log('PUPPIES IN CART ARE', puppiesInCart)
+  puppiesInCart.forEach(elem => {
+    console.log('ELEM.PRICE is', elem[0].price)
+    total += elem[0].price
+  })
+  console.log('TOTAL IS:', total)
 
-export const ConnectedForm = connect(mapState)(Form)
+  return {
+    puppies: puppiesInCart,
+    cart: state.cart,
+    total,
+    user: state.user
+  }
+}
+
+
+export const ConnectedForm = connect(mapStateToProps)(Form)
