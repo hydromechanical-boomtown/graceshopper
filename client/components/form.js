@@ -1,16 +1,18 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Button from '@material-ui/core/Button'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import TextField from '@material-ui/core/TextField'
-<<<<<<< HEAD
 import StripeCheckout from 'react-stripe-checkout'
-=======
-import {sellPuppy} from '../store/puppy'
-import {updateUserDatabase, me} from '../store/user'
-import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
+import { sellPuppy } from '../store/puppy'
+import { updateUserDatabase, me } from '../store/user'
+import { clearCart, handleGuestCheckout, createGuest } from '../store/cart'
 
 import axios from 'axios'
->>>>>>> master
+
+
+
+
+
 
 class Form extends Component {
   constructor(props) {
@@ -34,15 +36,25 @@ class Form extends Component {
       id: user.id
     })
   }
+  onToken = (token) => {
+    console.log("token is", token)
+    fetch('/save-stripe-token', {
+      method: 'POST',
+      body: JSON.stringify(token),
+    }).then(response => {
+      console.log("response is", response)
+      response.json().then(data => {
+        alert(`We are in business, ${data.email}`);
+      });
+    });
+  }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
-<<<<<<< HEAD
-  handleSubmit(event) {
-    event.preventDefault()
-=======
+
 
   async handleSubmit(event) {
     event.preventDefault()
@@ -56,101 +68,79 @@ class Form extends Component {
       const createdGuest = await this.props.createGuest(this.state)
       await this.props.handleGuestCheckout(createdGuest.id, this.props.cart)
     }
->>>>>>> master
+
   }
+
+
 
   render() {
     return (
-<<<<<<< HEAD
       <div>
         <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
           <TextField
-            required
+            required={true}
             id="required"
             label="Required"
-            defaultValue="First Name"
+            placeholder="First Name"
             margin="normal"
             onChange={this.handleChange}
-            name="fname"
+            name="firstName"
           />
-=======
-      <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="First Name"
-          margin="normal"
-          onChange={this.handleChange}
-          name="firstName"
-        />
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="Last Name"
-          margin="normal"
-          onChange={this.handleChange}
-          name="lastName"
-        />
-        {!this.props.user.email && (
->>>>>>> master
           <TextField
-            required
+            required={true}
             id="required"
             label="Required"
-<<<<<<< HEAD
-            defaultValue="Last Name"
-=======
-            placeholder="Email"
->>>>>>> master
+            placeholder="Last Name"
             margin="normal"
             onChange={this.handleChange}
-            name="lname"
+            name="lastName"
           />
-<<<<<<< HEAD
-          {this.props.user && (
+          {!this.props.user.email && (
             <TextField
-              required
+              required={true}
               id="required"
               label="Required"
-              defaultValue="Email"
+              placeholder="Email"
               margin="normal"
               onChange={this.handleChange}
               name="email"
             />
           )}
           <TextField
-            required
+            required={true}
             id="required"
             label="Required"
-            defaultValue="Address"
+            placeholder="Address"
             margin="normal"
             onChange={this.handleChange}
             name="address"
           />
+
+
+          <div>
+            <StripeCheckout
+              stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
+              token={this.onToken}
+              email={this.state.email}
+              address_line1={this.state.address}
+              amount={this.props.total * 100}>
+              <Button variant="contained" color="primary" type="submit">
+                Complete checkout
+           </Button>
+            </StripeCheckout>
+          </div>
+
         </form>
 
-        <StripeCheckout
-          stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
-          amount={this.props.total * 100}
-=======
-        )}
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="Address"
-          margin="normal"
-          onChange={this.handleChange}
-          name="address"
->>>>>>> master
-        />
       </div>
     )
   }
 }
-const mapStateToProps = state => {
+
+
+
+
+const mapState = state => {
   const puppiesInCart = state.cart.map(id => {
     return state.puppies.filter(puppy => {
       console.log(puppy)
@@ -166,7 +156,6 @@ const mapStateToProps = state => {
   })
   console.log('TOTAL IS:', total)
 
-<<<<<<< HEAD
   return {
     puppies: puppiesInCart,
     cart: state.cart,
@@ -174,9 +163,6 @@ const mapStateToProps = state => {
     user: state.user
   }
 }
-
-export const ConnectedForm = connect(mapStateToProps)(Form)
-=======
 const mapDispatch = dispatch => ({
   sellPuppy: (puppyId, ownerId, isUser) =>
     dispatch(sellPuppy(puppyId, ownerId, isUser)),
@@ -187,10 +173,7 @@ const mapDispatch = dispatch => ({
     dispatch(handleGuestCheckout(guestId, cart)),
   createGuest: guestInfo => dispatch(createGuest(guestInfo))
 })
-const mapState = state => ({
-  user: state.user,
-  cart: state.cart
-})
 
 export const ConnectedForm = connect(mapState, mapDispatch)(Form)
->>>>>>> master
+
+

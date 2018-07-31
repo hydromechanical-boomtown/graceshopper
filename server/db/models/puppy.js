@@ -36,7 +36,7 @@ const Puppy = db.define('puppy', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  sold: {
+  soldToken: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   }

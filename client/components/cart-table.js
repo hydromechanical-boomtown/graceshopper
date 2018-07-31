@@ -29,9 +29,11 @@ class CartComponent extends Component {
 
   componentDidMount() {
     this.props.fetchPuppies()
-
-    // this.props.fetchCart()
-    //I have a feeling the above doesn't need to be here because cart is established on state, we only want to be fetching cart as a hook after a user logs in, we fetch the cart
+    this.props.fetchCart()
+    this.setState({
+      loaded:true
+    })
+   
   }
 
   removeFromCart(id) {
