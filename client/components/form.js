@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
 import TextField from '@material-ui/core/TextField'
+import StripeCheckout from 'react-stripe-checkout'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
-import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
-
-import axios from 'axios'
+import {clearCart, handleGuestCheckout, createGuest, clear} from '../store/cart'
+import store from '../store'
+import history from '../history'
 
 class Form extends Component {
   constructor(props) {
@@ -30,6 +31,27 @@ class Form extends Component {
       id: user.id
     })
   }
+  onToken = async token => {
+    console.log(token)
+    if (this.props.user.email) {
+      this.props.cart.forEach(async puppyId => {
+        await this.props.sellPuppy(puppyId, this.props.user.id, true, token.id)
+      })
+      await this.props.updateUserDatabase(this.state)
+      console.log('BEFORE CLEAR CART')
+      await this.props.clearCart()
+      console.log('AFTER CLEAR CART')
+    } else {
+      const createdGuest = await this.props.createGuest(this.state)
+      console.log('token were sending is', token.id)
+      await this.props.handleGuestCheckout(
+        createdGuest.id,
+        this.props.cart,
+        token.id
+      )
+      store.dispatch(clear())
+    }
+  }
 
   handleChange(event) {
     this.setState({
@@ -37,31 +59,16 @@ class Form extends Component {
     })
   }
 
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault()
-    if (this.props.user.email) {
-      this.props.cart.forEach(puppyId => {
-        this.props.sellPuppy(this.props.user.id, puppyId, true)
-      })
-      this.props.updateUserDatabase(this.state)
-      this.props.clearCart()
-    } else {
-      const createdGuest = await this.props.createGuest(this.state)
-      await this.props.handleGuestCheckout(createdGuest.id, this.props.cart)
-    }
   }
 
   render() {
     return (
-      <form
-        noValidate
-        autoComplete="off"
-        onSubmit={this.handleSubmit}
-        className="form"
-      >
-        <div style={{backgroundColor: 'white', marginTop: 10}} className="form">
+      <div>
+        <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
           <TextField
-            required
+            required={true}
             id="required"
             label="Required"
             placeholder="First Name"
@@ -69,57 +76,104 @@ class Form extends Component {
             onChange={this.handleChange}
             name="firstName"
           />
-          <TextField
-            required
-            id="required"
-            label="Required"
-            placeholder="Last Name"
-            margin="normal"
-            onChange={this.handleChange}
-            name="lastName"
-          />
-          {!this.props.user.email && (
+          <div
+            style={{backgroundColor: 'white', marginTop: 10}}
+            className="form"
+          >
             <TextField
-              required
+              required={true}
               id="required"
               label="Required"
-              placeholder="Email"
+              placeholder="Last Name"
               margin="normal"
               onChange={this.handleChange}
-              name="email"
+              name="lastName"
             />
-          )}
-          <TextField
-            required
-            id="required"
-            label="Required"
-            placeholder="Address"
-            margin="normal"
-            onChange={this.handleChange}
-            name="address"
-          />
-        </div>
-        <Button variant="contained" color="primary" type="submit">
-          Checkout
-        </Button>
-      </form>
+            {!this.props.user.email && (
+              <TextField
+                required={true}
+                id="required"
+                label="Required"
+                placeholder="Email"
+                margin="normal"
+                onChange={this.handleChange}
+                name="email"
+              />
+            )}
+            <TextField
+              required={true}
+              id="required"
+              label="Required"
+              placeholder="Address"
+              margin="normal"
+              onChange={this.handleChange}
+              name="address"
+            />
+          </div>
+          <div>
+            <StripeCheckout
+              stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
+              token={this.onToken}
+              email={this.state.email}
+              address_line1={this.state.address}
+              amount={this.props.total * 100}
+            >
+              <Button variant="contained" color="primary" type="submit">
+                Complete checkout
+              </Button>
+            </StripeCheckout>
+          </div>
+        </form>
+      </div>
     )
   }
 }
 
+const mapState = state => {
+  let total = 0
+  let puppiesInCart = []
+  if (state.cart.length) {
+    puppiesInCart = state.cart
+      .map(id => {
+        // console.log('ID TO FIND IS', id)
+        // console.log('CART IS', state.cart)
+        const filteredPuppy = state.puppies.find(puppy => {
+          // console.log('PUPPY ID IS', puppy.id)
+          // console.log('CART UPPY ID IS,', id)
+          return puppy.id === id
+        })
+        // console.log(filteredPuppy)
+        return filteredPuppy
+      })
+      .filter(el => el !== undefined)
+
+    // console.log('PUPPIES IN CART ARE', puppiesInCart)
+    if (puppiesInCart.length) {
+      puppiesInCart.forEach(elem => {
+        // console.log('ELEM.PRICE is', elem.price)
+        total += elem.price
+      })
+    }
+
+    console.log('TOTAL IS:', total)
+  }
+
+  return {
+    puppies: puppiesInCart,
+    cart: state.cart,
+    total,
+    user: state.user
+  }
+}
 const mapDispatch = dispatch => ({
-  sellPuppy: (puppyId, ownerId, isUser) =>
-    dispatch(sellPuppy(puppyId, ownerId, isUser)),
+  sellPuppy: (puppyId, ownerId, isUser, token) =>
+    dispatch(sellPuppy(puppyId, ownerId, isUser, token)),
   updateUserDatabase: info => dispatch(updateUserDatabase(info)),
   clearCart: () => dispatch(clearCart()),
   me: () => dispatch(me()),
-  handleGuestCheckout: (guestId, cart) =>
-    dispatch(handleGuestCheckout(guestId, cart)),
+  handleGuestCheckout: (guestId, cart, token) =>
+    dispatch(handleGuestCheckout(guestId, cart, token)),
   createGuest: guestInfo => dispatch(createGuest(guestInfo))
-})
-const mapState = state => ({
-  user: state.user,
-  cart: state.cart
 })
 
 export const ConnectedForm = connect(mapState, mapDispatch)(Form)

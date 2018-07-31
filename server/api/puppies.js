@@ -4,7 +4,12 @@ module.exports = router
 // these routes are already mounted on /api/puppies
 router.get('/', async (req, res, next) => {
   try {
-    const puppies = await Puppy.findAll()
+    const puppies = await Puppy.findAll({
+      where: {
+        userId: null,
+        guestId: null
+      }
+    })
     res.json(puppies)
   } catch (err) {
     next(err)
@@ -21,6 +26,7 @@ router.get('/:puppyId', async (req, res, next) => {
 })
 
 router.put('/', async (req, res, next) => {
+  console.log('token is', req.body.token)
   try {
     if (req.body.isUser) {
       const puppy = await Puppy.findById(req.body.puppyId)
@@ -30,7 +36,8 @@ router.put('/', async (req, res, next) => {
         if (puppy.userId || puppy.guestId) {
           res.status(412).send()
         } else {
-          const updatedPuppy = await puppy.setUser(user)
+          await puppy.setUser(user)
+          const updatedPuppy = await puppy.update({soldToken: req.body.token})
           res.status(200).json(updatedPuppy)
         }
       }
@@ -41,7 +48,9 @@ router.put('/', async (req, res, next) => {
         if (puppy.userId || puppy.guestId) {
           res.status(412).send()
         } else {
-          const updatedPuppy = await puppy.setGuest(guest)
+          await puppy.setGuest(guest)
+          const updatedPuppy = await puppy.update({soldToken: req.body.token})
+          console.log(updatedPuppy)
           res.status(200).json(updatedPuppy)
         }
       }
@@ -65,6 +74,19 @@ router.delete('/:puppyId', async (req, res, next) => {
     const puppy = await Puppy.findById(req.params.puppyId)
     await puppy.destroy()
     res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/mypuppies', async (req, res, next) => {
+  try {
+    const myPuppies = await Puppy.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
+    res.json(myPuppies)
   } catch (err) {
     next(err)
   }

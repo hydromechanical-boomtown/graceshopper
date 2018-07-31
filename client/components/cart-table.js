@@ -24,18 +24,22 @@ class CartComponent extends Component {
   constructor(props) {
     super(props)
     this.removeFromCart = this.removeFromCart.bind(this)
+    this.state = {loaded: false}
   }
 
   componentDidMount() {
     this.props.fetchPuppies()
-    // this.props.fetchCart()
-    //I have a feeling the above doesn't need to be here because cart is established on state, we only want to be fetching cart as a hook after a user logs in, we fetch the cart
+    this.props.fetchCart()
+    this.setState({
+      loaded: true
+    })
   }
 
   removeFromCart(id) {
     store.dispatch(removeItem(id))
   }
   render() {
+<<<<<<< HEAD
     return (
       <div>
         <Paper className="form" style={{marginTop: 10}}>
@@ -86,20 +90,79 @@ class CartComponent extends Component {
           </Button>
         </Link>
       </div>
+=======
+    console.log(this.props)
+    return this.state.loaded ? (
+      !this.props.cart.length ? (
+        <h2> Your cart is empty! </h2>
+      ) : (
+        <div>
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Puppy in Cart</TableCell>
+                  <TableCell>Remove</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.props.puppies.map(puppy => {
+                  return (
+                    <TableRow key={puppy.id}>
+                      <TableCell component="th" scope="row">
+                        {puppy.name}
+                      </TableCell>
+                      <TableCell>
+                        {' '}
+                        <IconButton
+                          aria-label="Delete"
+                          onClick={() => {
+                            this.removeFromCart(puppy.id)
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>{' '}
+                      </TableCell>
+                      <TableCell numeric>{puppy.price}</TableCell>
+                    </TableRow>
+                  )
+                })}
+                <TableRow>
+                  <TableCell numeric>Total: {this.props.total}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Paper>
+          <Link to="/cart/checkout">
+            <Button variant="contained" color="primary" type="submit">
+              Proceed to checkout
+            </Button>
+          </Link>
+        </div>
+      )
+    ) : (
+      <h2>Loading....</h2>
+>>>>>>> master
     )
   }
 }
 
 const mapStateToProps = state => {
-  const puppiesInCart = state.cart.map(id => {
-    return state.puppies.filter(puppy => {
-      return puppy.id === id
+  console.log(state.cart, typeof state.cart)
+  const puppiesInCart = state.cart
+    .map(id => {
+      return state.puppies.find(puppy => {
+        return puppy.id === id
+      })
     })
-  })
+    .filter(el => el !== undefined)
+  console.log('puppiesInCart', puppiesInCart)
 
   let total = 0
   puppiesInCart.forEach(elem => {
-    total += elem[0].price
+    console.log(elem.price, typeof elem.price)
+    total += elem.price
   })
 
   return {

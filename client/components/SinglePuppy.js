@@ -9,6 +9,9 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import DeleteIcon from '@material-ui/icons/Delete'
+import store from '../store'
+import {addItem, removeItem} from '../store/cart'
 import Divider from '@material-ui/core/Divider'
 const style = {
   progress: {
@@ -24,9 +27,34 @@ const style = {
 }
 
 class SinglePuppy extends Component {
-  componentDidMount() {
-    this.props.fetchSinglePuppy()
+  constructor() {
+    super()
+    this.state = {
+      isDisabled: false
+    }
   }
+
+  async componentDidMount() {
+    await this.props.fetchSinglePuppy()
+    console.log('PUPPPY', this.props.puppy)
+    if (this.props.cart.indexOf(this.props.puppy.id) !== -1) {
+      this.setState({isDisabled: true})
+    }
+  }
+
+  removeFromCart(id) {
+    store.dispatch(removeItem(id))
+    this.setState({
+      isDisabled: false
+    })
+  }
+  addToCart(id) {
+    store.dispatch(addItem(id))
+    this.setState({
+      isDisabled: true
+    })
+  }
+
   render() {
     const props = this.props
     return !props.puppy ? (
@@ -54,9 +82,27 @@ class SinglePuppy extends Component {
         </CardContent>
         <Divider />
         <CardActions>
-          <IconButton color="primary" aria-label="Add to shopping cart">
-            <AddShoppingCartIcon />
-          </IconButton>
+          {!this.state.isDisabled ? (
+            <IconButton
+              color="primary"
+              aria-label="Add to shopping cart"
+              onClick={() => {
+                this.addToCart(props.puppy.id)
+              }}
+            >
+              <AddShoppingCartIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              aria-label="Delete"
+              color="primary"
+              onClick={() => {
+                this.removeFromCart(props.puppy.id)
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
         </CardActions>
       </Card>
     )
@@ -68,7 +114,8 @@ const mapState = (state, ownProps) => {
     return puppy.id === Number(ownProps.match.params.puppyId)
   })
   return {
-    puppy: foundPuppy
+    puppy: foundPuppy,
+    cart: state.cart
   }
 }
 const mapDispatch = (dispatch, ownProps) => ({
