@@ -39,65 +39,13 @@ class CartComponent extends Component {
     store.dispatch(removeItem(id))
   }
   render() {
-<<<<<<< HEAD
-    return (
-      <div>
-        <Paper className="form" style={{marginTop: 10}}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Puppy in Cart</TableCell>
-                <TableCell>Remove</TableCell>
-                <TableCell>Price</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.puppies.map(puppy => {
-                return (
-                  <TableRow key={puppy[0].id}>
-                    <TableCell component="th" scope="row">
-                      {puppy[0].name}
-                    </TableCell>
-                    <TableCell>
-                      {' '}
-                      <IconButton
-                        aria-label="Delete"
-                        onClick={() => {
-                          this.removeFromCart(puppy[0].id)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>{' '}
-                    </TableCell>
-                    <TableCell numeric>{puppy[0].price}</TableCell>
-                  </TableRow>
-                )
-              })}
-              <TableRow>
-                <TableCell numeric>Total: {this.props.total}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Paper>
-        <Link to="/cart/checkout">
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            style={{marginTop: 10}}
-          >
-            Proceed to checkout
-          </Button>
-        </Link>
-      </div>
-=======
     console.log(this.props)
     return this.state.loaded ? (
       !this.props.cart.length ? (
         <h2> Your cart is empty! </h2>
       ) : (
         <div>
-          <Paper>
+          <Paper className="form" style={{marginTop: 10}}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -135,7 +83,12 @@ class CartComponent extends Component {
             </Table>
           </Paper>
           <Link to="/cart/checkout">
-            <Button variant="contained" color="primary" type="submit">
+            <Button
+              style={{marginTop: 10}}
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
               Proceed to checkout
             </Button>
           </Link>
@@ -143,7 +96,6 @@ class CartComponent extends Component {
       )
     ) : (
       <h2>Loading....</h2>
->>>>>>> master
     )
   }
 }
