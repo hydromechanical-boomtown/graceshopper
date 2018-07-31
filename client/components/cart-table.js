@@ -29,12 +29,12 @@ class CartComponent extends Component {
 
   componentDidMount() {
     this.props.fetchPuppies()
-    this.props.fetchCart()
-    this.setState({loaded:true})
+
+    // this.props.fetchCart()
+    //I have a feeling the above doesn't need to be here because cart is established on state, we only want to be fetching cart as a hook after a user logs in, we fetch the cart
   }
 
   removeFromCart(id) {
-    console.log('clicked!!')
     store.dispatch(removeItem(id))
   }
   render() {
@@ -54,7 +54,6 @@ class CartComponent extends Component {
             </TableHead>
             <TableBody>
               {this.props.puppies.map(puppy => {
-                console.log('PUPPY IS ', puppy)
                 return (
                   <TableRow key={puppy[0].id}>
                     <TableCell component="th" scope="row">
@@ -95,18 +94,14 @@ class CartComponent extends Component {
 const mapStateToProps = state => {
   const puppiesInCart = state.cart.map(id => {
     return state.puppies.filter(puppy => {
-      console.log(puppy)
       return puppy.id === id
     })
   })
 
   let total = 0
-  console.log('PUPPIES IN CART ARE', puppiesInCart)
   puppiesInCart.forEach(elem => {
-    console.log('ELEM.PRICE is', elem[0].price)
     total += elem[0].price
   })
-  console.log('TOTAL IS:', total)
 
   return {
     puppies: puppiesInCart,

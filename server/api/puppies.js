@@ -1,7 +1,7 @@
 const router = require('express').Router()
-const {Puppy, User} = require('../db/models') //make sure that when Puppy model is created, that it is exported in the right place
+const {Puppy, User, Guest} = require('../db/models') //make sure that when Puppy model is created, that it is exported in the right place
 module.exports = router
-
+// these routes are already mounted on /api/puppies
 router.get('/', async (req, res, next) => {
   try {
     const puppies = await Puppy.findAll()
@@ -22,15 +22,28 @@ router.get('/:puppyId', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const puppy = await Puppy.findById(req.body.puppyId)
-    const user = await User.findById(req.body.userId)
+    if (req.body.isUser) {
+      const puppy = await Puppy.findById(req.body.puppyId)
+      const user = await User.findById(req.body.userId)
 
-    if (puppy && user) {
-      if (puppy.userId || puppy.guestUserId) {
-        res.status(412).send()
-      } else {
-        await user.addPuppy(puppy)
-        res.status(200).send()
+      if (puppy && user) {
+        if (puppy.userId || puppy.guestId) {
+          res.status(412).send()
+        } else {
+          const updatedPuppy = await puppy.setUser(user)
+          res.status(200).json(updatedPuppy)
+        }
+      }
+    } else {
+      const puppy = await Puppy.findById(req.body.puppyId)
+      const guest = await Guest.findById(req.body.userId)
+      if (puppy && guest) {
+        if (puppy.userId || puppy.guestId) {
+          res.status(412).send()
+        } else {
+          const updatedPuppy = await puppy.setGuest(guest)
+          res.status(200).json(updatedPuppy)
+        }
       }
     }
   } catch (err) {
