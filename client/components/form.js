@@ -48,7 +48,7 @@ class Form extends Component {
     event.preventDefault()
     if (this.props.user.email) {
       this.props.cart.forEach(puppyId => {
-        this.props.sellPuppy(this.props.user.id, puppyId, true)
+        this.props.sellPuppy(puppyId, this.props.user.id, true)
       })
       this.props.updateUserDatabase(this.state)
       this.props.clearCart()

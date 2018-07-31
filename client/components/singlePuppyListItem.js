@@ -12,7 +12,7 @@ import {addItem, removeItem} from '../store/cart'
 import store from '../store'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-export default class SinglePuppyListItem extends Component {
+class SinglePuppyListItemUnconnected extends Component {
   constructor() {
     super()
     this.state = {
@@ -22,6 +22,12 @@ export default class SinglePuppyListItem extends Component {
     this.addToCart = this.addToCart.bind(this)
   }
 
+  componentDidMount() {
+    console.log(this.props.cart.indexOf(this.props.puppy.id))
+    if (this.props.cart.indexOf(this.props.puppy.id) !== -1) {
+      this.setState({isDisabled: true})
+    }
+  }
   removeFromCart(id) {
     store.dispatch(removeItem(id))
     this.setState({
@@ -81,9 +87,9 @@ export default class SinglePuppyListItem extends Component {
   }
 }
 
-// const mapState = state => ({
-//   puppy: state.puppies
-// })
+const mapState = state => ({
+  cart: state.cart
+})
 
-// const ConnectedSinglePuppyListItem = connect(mapState)(SinglePuppyListItem)
-// export default ConnectedSinglePuppyListItem
+const SinglePuppyListItem = connect(mapState)(SinglePuppyListItemUnconnected)
+export default SinglePuppyListItem
