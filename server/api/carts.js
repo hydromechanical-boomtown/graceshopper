@@ -5,8 +5,8 @@ const {Cart} = require('../db/models')
 //creates cart if no cart exists
 router.get('/', async (req, res, next) => {
   try {
-    if (req.session.passport.user) {
-      const user = req.session.passport.user
+    if (req.user) {
+      const user = req.user.id
       let cart = await Cart.find({
         where: {userId: user}
       })
@@ -28,7 +28,7 @@ router.get('/', async (req, res, next) => {
 
 router.delete('/', async (req, res, next) => {
   try {
-    const user = req.session.passport.user
+    const user = req.user.id
     const cart = await Cart.findAll({where: {userId: user}})
     await cart.destroy()
     res.sendStatus(204)
@@ -39,7 +39,7 @@ router.delete('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const user = req.session.passport.user
+    const user = req.user.id
     const cart = await Cart.findAll({where: {userId: user}})
     await cart.update(req.body)
     res.sendStatus(202)
@@ -50,7 +50,7 @@ router.put('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const user = req.session.passport.user
+    const user = req.user.id
     const cart = await Cart.create()
     cart.userId = user
     res.status(201).json(cart)
