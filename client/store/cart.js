@@ -31,16 +31,18 @@ const getCart = cart => ({
 export const fetchCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
   const cart = res.data
-  dispatch(getCart(cart))
+  dispatch(getCart(cart.puppies))
 }
 //creating a new guest in the databse and then removing all items from cart
 export const clearCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
+  console.log('clearCart res cart GET', res.data)
   if (res.data) {
     await axios.delete('api/carts')
   }
   //the above should delete a cart if one currently exists (i.e. the person checking out is a user who already has a cart saved to the database)
   dispatch(clear())
+  console.log('dispatch clear called')
 }
 
 export const createGuest = guestInfo => async dispatch => {

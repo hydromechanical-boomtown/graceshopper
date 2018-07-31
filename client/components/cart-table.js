@@ -31,9 +31,8 @@ class CartComponent extends Component {
     this.props.fetchPuppies()
     this.props.fetchCart()
     this.setState({
-      loaded:true
+      loaded: true
     })
-   
   }
 
   removeFromCart(id) {
@@ -41,68 +40,76 @@ class CartComponent extends Component {
   }
   render() {
     console.log(this.props)
-    return this.state.loaded ? (!this.props.cart.length ? (
-      <h2> Your cart is empty! </h2>
+    return this.state.loaded ? (
+      !this.props.cart.length ? (
+        <h2> Your cart is empty! </h2>
+      ) : (
+        <div>
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Puppy in Cart</TableCell>
+                  <TableCell>Remove</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.props.puppies.map(puppy => {
+                  return (
+                    <TableRow key={puppy.id}>
+                      <TableCell component="th" scope="row">
+                        {puppy.name}
+                      </TableCell>
+                      <TableCell>
+                        {' '}
+                        <IconButton
+                          aria-label="Delete"
+                          onClick={() => {
+                            this.removeFromCart(puppy.id)
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>{' '}
+                      </TableCell>
+                      <TableCell numeric>{puppy.price}</TableCell>
+                    </TableRow>
+                  )
+                })}
+                <TableRow>
+                  <TableCell numeric>Total: {this.props.total}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Paper>
+          <Link to="/cart/checkout">
+            <Button variant="contained" color="primary" type="submit">
+              Proceed to checkout
+            </Button>
+          </Link>
+        </div>
+      )
     ) : (
-      <div>
-        <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Puppy in Cart</TableCell>
-                <TableCell>Remove</TableCell>
-                <TableCell>Price</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.puppies.map(puppy => {
-                return (
-                  <TableRow key={puppy[0].id}>
-                    <TableCell component="th" scope="row">
-                      {puppy[0].name}
-                    </TableCell>
-                    <TableCell>
-                      {' '}
-                      <IconButton
-                        aria-label="Delete"
-                        onClick={() => {
-                          this.removeFromCart(puppy[0].id)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>{' '}
-                    </TableCell>
-                    <TableCell numeric>{puppy[0].price}</TableCell>
-                  </TableRow>
-                )
-              })}
-              <TableRow>
-                <TableCell numeric>Total: {this.props.total}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Paper>
-        <Link to="/cart/checkout">
-          <Button variant="contained" color="primary" type="submit">
-            Proceed to checkout
-          </Button>
-        </Link>
-      </div>
-    )) : (<h2>Loading....</h2>
+      <h2>Loading....</h2>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const puppiesInCart = state.cart.map(id => {
-    return state.puppies.filter(puppy => {
-      return puppy.id === id
+  console.log(state.cart, typeof state.cart)
+  const puppiesInCart = state.cart
+    .map(id => {
+      return state.puppies.find(puppy => {
+        return puppy.id === id
+      })
     })
-  })
+    .filter(el => el !== undefined)
+  console.log('puppiesInCart', puppiesInCart)
 
   let total = 0
   puppiesInCart.forEach(elem => {
-    total += elem[0].price
+    console.log(elem.price, typeof elem.price)
+    total += elem.price
   })
 
   return {

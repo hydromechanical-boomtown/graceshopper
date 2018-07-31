@@ -37,7 +37,9 @@ class Form extends Component {
         await this.props.sellPuppy(puppyId, this.props.user.id, true, token.id)
       })
       await this.props.updateUserDatabase(this.state)
+      console.log('BEFORE CLEAR CART')
       await this.props.clearCart()
+      console.log('AFTER CLEAR CART')
     } else {
       const createdGuest = await this.props.createGuest(this.state)
       console.log('token were sending is', token.id)
@@ -58,6 +60,7 @@ class Form extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    console.log('handle submit called')
   }
 
   render() {
@@ -125,25 +128,29 @@ class Form extends Component {
 const mapState = state => {
   let total = 0
   let puppiesInCart = []
-  if (state.cart[0]) {
-    puppiesInCart = state.cart.map(id => {
-      console.log('ID TO FIND IS', id)
-      console.log('CART IS', state.cart)
-      const filteredPuppy = state.puppies.filter(puppy => {
-        console.log('PUPPY ID IS', puppy.id)
-        console.log('CART UPPY ID IS,', id)
-        return puppy.id === id
+  if (state.cart.length) {
+    puppiesInCart = state.cart
+      .map(id => {
+        // console.log('ID TO FIND IS', id)
+        // console.log('CART IS', state.cart)
+        const filteredPuppy = state.puppies.find(puppy => {
+          // console.log('PUPPY ID IS', puppy.id)
+          // console.log('CART UPPY ID IS,', id)
+          return puppy.id === id
+        })
+        // console.log(filteredPuppy)
+        return filteredPuppy
       })
-      console.log(filteredPuppy)
-      return filteredPuppy
-    })
+      .filter(el => el !== undefined)
 
-    console.log('PUPPIES IN CART ARE', puppiesInCart)
-    puppiesInCart &&
+    // console.log('PUPPIES IN CART ARE', puppiesInCart)
+    if (puppiesInCart.length) {
       puppiesInCart.forEach(elem => {
-        console.log('ELEM.PRICE is', elem[0].price)
-        total += elem[0].price
+        // console.log('ELEM.PRICE is', elem.price)
+        total += elem.price
       })
+    }
+
     console.log('TOTAL IS:', total)
   }
 
