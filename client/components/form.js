@@ -1,18 +1,13 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import TextField from '@material-ui/core/TextField'
 import StripeCheckout from 'react-stripe-checkout'
-import { sellPuppy } from '../store/puppy'
-import { updateUserDatabase, me } from '../store/user'
-import { clearCart, handleGuestCheckout, createGuest } from '../store/cart'
+import {sellPuppy} from '../store/puppy'
+import {updateUserDatabase, me} from '../store/user'
+import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
 
 import axios from 'axios'
-
-
-
-
-
 
 class Form extends Component {
   constructor(props) {
@@ -36,17 +31,34 @@ class Form extends Component {
       id: user.id
     })
   }
-  onToken = (token) => {
-    console.log("token is", token)
-    fetch('/save-stripe-token', {
-      method: 'POST',
-      body: JSON.stringify(token),
-    }).then(response => {
-      console.log("response is", response)
-      response.json().then(data => {
-        alert(`We are in business, ${data.email}`);
-      });
-    });
+  onToken = async token => {
+    console.log(token)
+    if (this.props.user.email) {
+      this.props.cart.forEach(async puppyId => {
+        await this.props.sellPuppy(puppyId, this.props.user.id, true, token.id)
+      })
+      await this.props.updateUserDatabase(this.state)
+      await this.props.clearCart()
+    } else {
+      const createdGuest = await this.props.createGuest(this.state)
+      console.log('token were sending is', token.id)
+      await this.props.handleGuestCheckout(
+        createdGuest.id,
+        this.props.cart,
+        token.id
+      )
+    }
+
+    // console.log("token is", token)
+    // fetch('/save-stripe-token', {
+    //   method: 'POST',
+    //   body: JSON.stringify(token),
+    // }).then(response => {
+    //   console.log("response is", response)
+    //   response.json().then(data => {
+    //     alert(`We are in business, ${data.email}`);
+    //   });
+    // });
   }
 
   handleChange(event) {
@@ -55,23 +67,9 @@ class Form extends Component {
     })
   }
 
-
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault()
-    if (this.props.user.email) {
-      this.props.cart.forEach(puppyId => {
-        this.props.sellPuppy(puppyId, this.props.user.id, true)
-      })
-      this.props.updateUserDatabase(this.state)
-      this.props.clearCart()
-    } else {
-      const createdGuest = await this.props.createGuest(this.state)
-      await this.props.handleGuestCheckout(createdGuest.id, this.props.cart)
-    }
-
   }
-
-
 
   render() {
     return (
@@ -116,45 +114,50 @@ class Form extends Component {
             name="address"
           />
 
-
           <div>
             <StripeCheckout
               stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
               token={this.onToken}
               email={this.state.email}
               address_line1={this.state.address}
-              amount={this.props.total * 100}>
+              amount={this.props.total * 100}
+            >
               <Button variant="contained" color="primary" type="submit">
                 Complete checkout
-           </Button>
+              </Button>
             </StripeCheckout>
           </div>
-
         </form>
-
       </div>
     )
   }
 }
 
-
-
-
 const mapState = state => {
-  const puppiesInCart = state.cart.map(id => {
-    return state.puppies.filter(puppy => {
-      console.log(puppy)
-      return puppy.id === id
-    })
-  })
-
   let total = 0
-  console.log('PUPPIES IN CART ARE', puppiesInCart)
-  puppiesInCart.forEach(elem => {
-    console.log('ELEM.PRICE is', elem[0].price)
-    total += elem[0].price
-  })
-  console.log('TOTAL IS:', total)
+  let puppiesInCart = []
+  console.log(state.cart[0].length)
+  if (state.cart[0].length) {
+    puppiesInCart = state.cart.map(id => {
+      console.log('ID TO FIND IS', id)
+      console.log('CART IS', state.cart)
+      const filteredPuppy = state.puppies.filter(puppy => {
+        console.log('PUPPY ID IS', puppy.id)
+        console.log('CART UPPY ID IS,', id)
+        return puppy.id === id
+      })
+      console.log(filteredPuppy)
+      return filteredPuppy
+    })
+
+    console.log('PUPPIES IN CART ARE', puppiesInCart)
+    puppiesInCart &&
+      puppiesInCart.forEach(elem => {
+        console.log('ELEM.PRICE is', elem[0].price)
+        total += elem[0].price
+      })
+    console.log('TOTAL IS:', total)
+  }
 
   return {
     puppies: puppiesInCart,
@@ -164,16 +167,14 @@ const mapState = state => {
   }
 }
 const mapDispatch = dispatch => ({
-  sellPuppy: (puppyId, ownerId, isUser) =>
-    dispatch(sellPuppy(puppyId, ownerId, isUser)),
+  sellPuppy: (puppyId, ownerId, isUser, token) =>
+    dispatch(sellPuppy(puppyId, ownerId, isUser, token)),
   updateUserDatabase: info => dispatch(updateUserDatabase(info)),
   clearCart: () => dispatch(clearCart()),
   me: () => dispatch(me()),
-  handleGuestCheckout: (guestId, cart) =>
-    dispatch(handleGuestCheckout(guestId, cart)),
+  handleGuestCheckout: (guestId, cart, token) =>
+    dispatch(handleGuestCheckout(guestId, cart, token)),
   createGuest: guestInfo => dispatch(createGuest(guestInfo))
 })
 
 export const ConnectedForm = connect(mapState, mapDispatch)(Form)
-
-

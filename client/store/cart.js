@@ -48,9 +48,10 @@ export const createGuest = guestInfo => async dispatch => {
   return res.data
 }
 
-export const handleGuestCheckout = (guestId, cart) => dispatch => {
+export const handleGuestCheckout = (guestId, cart, token) => dispatch => {
+  console.log('toek in handeleGUestCheckout is', token)
   cart.forEach(async puppyId => {
-    await dispatch(sellPuppy(puppyId, guestId, false))
+    await dispatch(sellPuppy(puppyId, guestId, false, token))
   })
   clearCart()
 
