@@ -24,11 +24,13 @@ class CartComponent extends Component {
   constructor(props) {
     super(props)
     this.removeFromCart = this.removeFromCart.bind(this)
+    this.state = {loaded: false}
   }
 
   componentDidMount() {
     this.props.fetchPuppies()
     this.props.fetchCart()
+    this.setState({loaded:true})
   }
 
   removeFromCart(id) {
@@ -37,7 +39,9 @@ class CartComponent extends Component {
   }
   render() {
     console.log(this.props)
-    return (
+    return this.state.loaded ? (!this.props.cart.length ? (
+      <TableCell> Your cart is empty </TableCell>
+    ) : (
       <div>
         <Paper>
           <Table>
@@ -83,6 +87,7 @@ class CartComponent extends Component {
           </Button>
         </Link>
       </div>
+    )) : (<h2>Loading....</h2>
     )
   }
 }
