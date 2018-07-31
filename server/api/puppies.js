@@ -74,3 +74,16 @@ router.delete('/:puppyId', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/mypuppies', async (req, res, next) => {
+  try {
+    const myPuppies = await Puppy.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
+    res.json(myPuppies)
+  } catch (err) {
+    next(err)
+  }
+})
