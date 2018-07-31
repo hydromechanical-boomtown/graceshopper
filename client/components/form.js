@@ -67,19 +67,19 @@ class Form extends Component {
     return (
       <div>
         <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-          <TextField
-            required={true}
-            id="required"
-            label="Required"
-            placeholder="First Name"
-            margin="normal"
-            onChange={this.handleChange}
-            name="firstName"
-          />
           <div
             style={{backgroundColor: 'white', marginTop: 10}}
             className="form"
           >
+            <TextField
+              required={true}
+              id="required"
+              label="Required"
+              placeholder="First Name"
+              margin="normal"
+              onChange={this.handleChange}
+              name="firstName"
+            />
             <TextField
               required={true}
               id="required"
