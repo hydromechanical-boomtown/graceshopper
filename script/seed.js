@@ -97,7 +97,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'http://cdn2-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Sausage',
@@ -108,7 +108,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://78.media.tumblr.com/157f5bffb5f90affa26c979417b9f0f4/tumblr_n1f0zpahkg1t4mpwko1_500.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Rainbow',
@@ -120,7 +120,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'http://www.doglib.com/wp-content/uploads/sites/2/cu/cute-buff-american-cocker-spaniel-pup-breed.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Biscuit',
@@ -131,7 +131,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'https://i.pinimg.com/736x/21/6f/79/216f7921cbe5ee218355aac97b3bf659--baby-maltese-maltese-puppies.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Smuggle',
@@ -143,7 +143,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Spot',
@@ -154,7 +154,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'http://cdn2-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Sausage',
@@ -165,7 +165,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://78.media.tumblr.com/157f5bffb5f90affa26c979417b9f0f4/tumblr_n1f0zpahkg1t4mpwko1_500.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Rainbow',
@@ -177,7 +177,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'http://www.doglib.com/wp-content/uploads/sites/2/cu/cute-buff-american-cocker-spaniel-pup-breed.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Biscuit',
@@ -188,7 +188,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'https://i.pinimg.com/736x/21/6f/79/216f7921cbe5ee218355aac97b3bf659--baby-maltese-maltese-puppies.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Smuggle',
@@ -200,7 +200,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Spot',
@@ -211,7 +211,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'http://cdn2-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Sausage',
@@ -222,7 +222,7 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://78.media.tumblr.com/157f5bffb5f90affa26c979417b9f0f4/tumblr_n1f0zpahkg1t4mpwko1_500.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Rainbow',
@@ -234,7 +234,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'http://www.doglib.com/wp-content/uploads/sites/2/cu/cute-buff-american-cocker-spaniel-pup-breed.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Biscuit',
@@ -245,7 +245,7 @@ async function seed() {
       gender: 'Female',
       imageURL:
         'https://i.pinimg.com/736x/21/6f/79/216f7921cbe5ee218355aac97b3bf659--baby-maltese-maltese-puppies.jpg',
-      sold: false
+      soldToken: ''
     }),
     Puppy.create({
       name: 'Smuggle',
@@ -257,11 +257,14 @@ async function seed() {
       gender: 'Male',
       imageURL:
         'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
-      sold: false
+      soldToken: ''
     })
   ])
 
-  await users[1].addPuppy(puppies[4])
+  await users[0].addPuppy(puppies[0])
+  await users[0].addPuppy(puppies[1])
+  await users[0].addPuppy(puppies[2])
+  await users[1].addPuppy(puppies[3])
 
   // Wowzers! We can even `await` on the right-hand side of the assignment operator
   // and store the result that the promise resolves to in a variable! This is nice!
@@ -270,6 +273,9 @@ async function seed() {
 
   console.log(`seeded ${guests.length} guests`)
 
+  console.log(
+    'added puppies using User.addPuppy(puppy) sequelize accessor methods'
+  )
   console.log(`seeded successfully`)
 }
 
