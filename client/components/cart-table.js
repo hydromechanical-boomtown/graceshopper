@@ -9,16 +9,10 @@ import {connect} from 'react-redux'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import store from '../store'
-import {removeItem, fetchCart} from '../store/cart'
+import {removeItem, fetchCart, updateCart} from '../store/cart'
 import {fetchPuppies} from '../store/puppy'
 import Button from '@material-ui/core/Button'
 import {Link} from 'react-router-dom'
-
-const dummyPuppies = [
-  {id: 1, name: 'Dog', price: 300},
-  {id: 2, name: 'Harold', price: 300},
-  {id: 3, name: 'David', price: 300}
-]
 
 class CartComponent extends Component {
   constructor(props) {
@@ -29,14 +23,18 @@ class CartComponent extends Component {
 
   componentDidMount() {
     this.props.fetchPuppies()
-    this.props.fetchCart()
+
+    if (this.props.user.id) this.props.fetchCart()
+
     this.setState({
       loaded: true
     })
   }
 
   removeFromCart(id) {
-    store.dispatch(removeItem(id))
+    this.props.user.id
+      ? this.props.updateCart([...this.props.cart].filter(el => el !== id))
+      : store.dispatch(removeItem(id))
   }
   render() {
     console.log(this.props)
@@ -115,12 +113,14 @@ const mapStateToProps = state => {
   return {
     puppies: puppiesInCart,
     cart: state.cart,
-    total
+    total,
+    user: state.user
   }
 }
 const mapDispatchToProps = dispatch => ({
   fetchPuppies: () => dispatch(fetchPuppies()),
-  fetchCart: () => dispatch(fetchCart())
+  fetchCart: () => dispatch(fetchCart()),
+  updateCart: cart => dispatch(updateCart(cart))
 })
 
 export const Cart = connect(mapStateToProps, mapDispatchToProps)(CartComponent)

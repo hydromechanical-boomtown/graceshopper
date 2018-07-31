@@ -41,6 +41,7 @@ class Form extends Component {
       console.log('BEFORE CLEAR CART')
       await this.props.clearCart()
       console.log('AFTER CLEAR CART')
+      history.push('/home')
     } else {
       const createdGuest = await this.props.createGuest(this.state)
       console.log('token were sending is', token.id)
@@ -49,7 +50,8 @@ class Form extends Component {
         this.props.cart,
         token.id
       )
-      store.dispatch(clear())
+      // store.dispatch(clear())
+      history.push('/cart/checkout/guest')
     }
   }
 

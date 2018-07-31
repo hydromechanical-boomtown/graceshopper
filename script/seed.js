@@ -261,11 +261,6 @@ async function seed() {
     })
   ])
 
-  await users[0].addPuppy(puppies[0])
-  await users[0].addPuppy(puppies[1])
-  await users[0].addPuppy(puppies[2])
-  await users[1].addPuppy(puppies[3])
-
   // Wowzers! We can even `await` on the right-hand side of the assignment operator
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)

@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import {connect} from 'react-redux'
-import {addItem, removeItem} from '../store/cart'
+import {addItem, removeItem, updateCart} from '../store/cart'
 import store from '../store'
 import DeleteIcon from '@material-ui/icons/Delete'
 
@@ -29,13 +29,17 @@ class SinglePuppyListItemUnconnected extends Component {
     }
   }
   removeFromCart(id) {
-    store.dispatch(removeItem(id))
+    this.props.user.id
+      ? this.props.updateCart([...this.props.cart].filter(el => el !== id))
+      : store.dispatch(removeItem(id))
     this.setState({
       isDisabled: false
     })
   }
   addToCart(id) {
-    store.dispatch(addItem(id))
+    this.props.user.id
+      ? this.props.updateCart([...this.props.cart, id])
+      : store.dispatch(addItem(id))
     this.setState({
       isDisabled: true
     })
@@ -88,8 +92,14 @@ class SinglePuppyListItemUnconnected extends Component {
 }
 
 const mapState = state => ({
-  cart: state.cart
+  cart: state.cart,
+  user: state.user
+})
+const mapDispatch = dispatch => ({
+  updateCart: cart => dispatch(updateCart(cart))
 })
 
-const SinglePuppyListItem = connect(mapState)(SinglePuppyListItemUnconnected)
+const SinglePuppyListItem = connect(mapState, mapDispatch)(
+  SinglePuppyListItemUnconnected
+)
 export default SinglePuppyListItem
