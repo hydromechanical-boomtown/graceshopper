@@ -11,7 +11,7 @@ class PuppyList extends Component {
   render() {
     return (
       <div>
-        <ul className="container">
+        <ul className="container" style={{alignContent: 'center'}}>
           {this.props.puppies.map(puppy => {
             return (
               <li key={puppy.id} className="child">

@@ -32,12 +32,12 @@ class SinglePuppy extends Component {
     return !props.puppy ? (
       <CircularProgress size={100} style={style.progress} />
     ) : (
-      <Card className="child">
+      <Card className="form" style={{marginTop: 10, alignContent: 'center'}}>
         <CardMedia
           style={style.media}
           image={props.puppy.imageURL}
           title={props.puppy.name}
-          className="imageSize"
+          className="form"
         />
         <CardContent align="left">
           <Typography variant="display2">{props.puppy.name}</Typography>
