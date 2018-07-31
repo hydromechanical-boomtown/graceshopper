@@ -5,7 +5,7 @@ const {Cart} = require('../db/models')
 //creates cart if no cart exists
 router.get('/', async (req, res, next) => {
   try {
-    if (req.session.user) {
+    if (req.session.passport.user) {
       const user = req.session.passport.user
       let cart = await Cart.find({
         where: {userId: user}

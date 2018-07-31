@@ -3,8 +3,8 @@ import {sellPuppy} from './puppy'
 
 const ADD_ITEM = 'ADD_ITEM'
 const REMOVE_ITEM = 'REMOVE_ITEM'
-const GET_CART = 'GET_CART'
 const CLEAR = 'CLEAR'
+const RECEIVED_CART = 'RECEIVED_CART'
 
 //add item to the cart on the redux store
 export const addItem = id => ({
@@ -22,8 +22,8 @@ export const removeItem = id => ({
   id
 })
 
-const getCart = cart => ({
-  type: GET_CART,
+const receivedCart = cart => ({
+  type: RECEIVED_CART,
   cart
 })
 
@@ -31,15 +31,16 @@ const getCart = cart => ({
 export const fetchCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
   const cart = res.data
-  dispatch(getCart(cart))
+  dispatch(receivedCart(cart))
 }
-//creating a new guest in the databse and then removing all items from cart
+
+//the above should delete a cart if one currently exists (i.e. the person checking out is a user who already has a cart saved to the database)
 export const clearCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
   if (res.data) {
     await axios.delete('api/carts')
   }
-  //the above should delete a cart if one currently exists (i.e. the person checking out is a user who already has a cart saved to the database)
+  //clears state
   dispatch(clear())
 }
 
@@ -52,7 +53,7 @@ export const handleGuestCheckout = (guestId, cart) => dispatch => {
   cart.forEach(async puppyId => {
     await dispatch(sellPuppy(puppyId, guestId, false))
   })
-  clearCart()
+  dispatch(clear())
 
   //1. create a guest in the database
   //2. add the guestId to the puppies the guest is checking out
@@ -68,8 +69,8 @@ const cartReducer = function(state = initialState, action) {
     case REMOVE_ITEM:
       return state.filter(item => item !== action.id)
 
-    case GET_CART:
-      return action.cart
+    case RECEIVED_CART:
+      return [...state, ...action.cart.puppies]
 
     case CLEAR:
       return initialState
