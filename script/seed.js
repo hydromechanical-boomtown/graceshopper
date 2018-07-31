@@ -144,6 +144,120 @@ async function seed() {
       imageURL:
         'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
       soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Spot',
+      price: 2000,
+      age: 6,
+      breed: 'Labrador',
+      description: 'Soft fur, even softer cuddles',
+      gender: 'Male',
+      imageURL:
+        'http://cdn2-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Sausage',
+      price: 2040,
+      age: 2,
+      breed: 'Sausage Dog',
+      description: "Likes long walks on the beach, doesn't like sausages",
+      gender: 'Male',
+      imageURL:
+        'https://78.media.tumblr.com/157f5bffb5f90affa26c979417b9f0f4/tumblr_n1f0zpahkg1t4mpwko1_500.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Rainbow',
+      price: 3000,
+      age: 4,
+      breed: 'Cockerspaniel',
+      description:
+        'Not the brightest bulb in the bunch, but is definitely the sweetest',
+      gender: 'Female',
+      imageURL:
+        'http://www.doglib.com/wp-content/uploads/sites/2/cu/cute-buff-american-cocker-spaniel-pup-breed.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Biscuit',
+      price: 5200,
+      age: 4,
+      breed: 'Cavoodle',
+      description: 'Always hungry, never sleepy',
+      gender: 'Female',
+      imageURL:
+        'https://i.pinimg.com/736x/21/6f/79/216f7921cbe5ee218355aac97b3bf659--baby-maltese-maltese-puppies.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Smuggle',
+      price: 3400,
+      age: 3,
+      breed: 'Pug',
+      description:
+        "Thinks he's bigger than he is, doesn't know how to turn right",
+      gender: 'Male',
+      imageURL:
+        'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Spot',
+      price: 2000,
+      age: 6,
+      breed: 'Labrador',
+      description: 'Soft fur, even softer cuddles',
+      gender: 'Male',
+      imageURL:
+        'http://cdn2-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Sausage',
+      price: 2040,
+      age: 2,
+      breed: 'Sausage Dog',
+      description: "Likes long walks on the beach, doesn't like sausages",
+      gender: 'Male',
+      imageURL:
+        'https://78.media.tumblr.com/157f5bffb5f90affa26c979417b9f0f4/tumblr_n1f0zpahkg1t4mpwko1_500.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Rainbow',
+      price: 3000,
+      age: 4,
+      breed: 'Cockerspaniel',
+      description:
+        'Not the brightest bulb in the bunch, but is definitely the sweetest',
+      gender: 'Female',
+      imageURL:
+        'http://www.doglib.com/wp-content/uploads/sites/2/cu/cute-buff-american-cocker-spaniel-pup-breed.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Biscuit',
+      price: 5200,
+      age: 4,
+      breed: 'Cavoodle',
+      description: 'Always hungry, never sleepy',
+      gender: 'Female',
+      imageURL:
+        'https://i.pinimg.com/736x/21/6f/79/216f7921cbe5ee218355aac97b3bf659--baby-maltese-maltese-puppies.jpg',
+      soldToken: ''
+    }),
+    Puppy.create({
+      name: 'Smuggle',
+      price: 3400,
+      age: 3,
+      breed: 'Pug',
+      description:
+        "Thinks he's bigger than he is, doesn't know how to turn right",
+      gender: 'Male',
+      imageURL:
+        'https://img.buzzfeed.com/buzzfeed-static/static/2016-11/2/13/asset/buzzfeed-prod-web08/sub-buzz-11149-1478107381-1.png?downsize=715:*&output-format=auto&output-quality=auto',
+      soldToken: ''
     })
   ])
 
