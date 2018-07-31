@@ -6,8 +6,9 @@ import StripeCheckout from 'react-stripe-checkout'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
 import {clearCart, handleGuestCheckout, createGuest, clear} from '../store/cart'
-import axios from 'axios'
 import store from '../store'
+import history from '../history'
+
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -60,7 +61,6 @@ class Form extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log('handle submit called')
   }
 
   render() {
