@@ -40,7 +40,7 @@ class CartComponent extends Component {
   render() {
     console.log(this.props)
     return this.state.loaded ? (!this.props.cart.length ? (
-      <TableCell> Your cart is empty </TableCell>
+      <h2> Your cart is empty! </h2>
     ) : (
       <div>
         <Paper>
