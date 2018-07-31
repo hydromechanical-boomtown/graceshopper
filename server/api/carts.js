@@ -6,20 +6,20 @@ const {Cart} = require('../db/models')
 router.get('/', async (req, res, next) => {
   try {
     if (req.user) {
+
       const user = req.user.id
       let cart = await Cart.find({
         where: {userId: user}
       })
       if (cart) {
         res.status(200).json(cart)
+      } else {
+        cart = await Cart.create()
+        cart.setUser(user)
+        res.status(201).json(cart)
       }
     }
 
-    //  else {
-    //   cart = await Cart.create()
-    //   cart.setUser(user)
-    //   res.status(201).json(cart)
-    // }
     //removed the above because we can create a cart when somebody logs out
   } catch (err) {
     next(err)

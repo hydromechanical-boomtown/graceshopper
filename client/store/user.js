@@ -1,7 +1,9 @@
 import axios from 'axios'
 import history from '../history'
+
 import {mergeCart, fetchCart, clear} from './cart'
 import {fetchPuppies} from './puppy'
+
 
 /**
  * ACTION TYPES

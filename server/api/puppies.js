@@ -26,6 +26,7 @@ router.get('/:puppyId', async (req, res, next) => {
 })
 
 router.put('/', async (req, res, next) => {
+  console.log('token is', req.body.token)
   try {
     if (req.body.isUser) {
       const puppy = await Puppy.findById(req.body.puppyId)
@@ -35,7 +36,8 @@ router.put('/', async (req, res, next) => {
         if (puppy.userId || puppy.guestId) {
           res.status(412).send()
         } else {
-          const updatedPuppy = await puppy.setUser(user)
+          await puppy.setUser(user)
+          const updatedPuppy = await puppy.update({soldToken: req.body.token})
           res.status(200).json(updatedPuppy)
         }
       }
@@ -46,7 +48,9 @@ router.put('/', async (req, res, next) => {
         if (puppy.userId || puppy.guestId) {
           res.status(412).send()
         } else {
-          const updatedPuppy = await puppy.setGuest(guest)
+          await puppy.setGuest(guest)
+          const updatedPuppy = await puppy.update({soldToken: req.body.token})
+          console.log(updatedPuppy)
           res.status(200).json(updatedPuppy)
         }
       }
