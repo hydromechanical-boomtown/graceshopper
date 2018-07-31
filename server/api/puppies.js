@@ -4,7 +4,12 @@ module.exports = router
 // these routes are already mounted on /api/puppies
 router.get('/', async (req, res, next) => {
   try {
-    const puppies = await Puppy.findAll()
+    const puppies = await Puppy.findAll({
+      where: {
+        userId: null,
+        guestId: null
+      }
+    })
     res.json(puppies)
   } catch (err) {
     next(err)
@@ -65,6 +70,19 @@ router.delete('/:puppyId', async (req, res, next) => {
     const puppy = await Puppy.findById(req.params.puppyId)
     await puppy.destroy()
     res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/mypuppies', async (req, res, next) => {
+  try {
+    const myPuppies = await Puppy.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
+    res.json(myPuppies)
   } catch (err) {
     next(err)
   }

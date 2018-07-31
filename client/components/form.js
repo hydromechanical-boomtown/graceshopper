@@ -5,8 +5,7 @@ import TextField from '@material-ui/core/TextField'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
 import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
-
-import axios from 'axios'
+import history from '../history'
 
 class Form extends Component {
   constructor(props) {
@@ -43,8 +42,9 @@ class Form extends Component {
       this.props.cart.forEach(puppyId => {
         this.props.sellPuppy(puppyId, this.props.user.id, true)
       })
-      this.props.updateUserDatabase(this.state)
+      await this.props.updateUserDatabase(this.state)
       this.props.clearCart()
+      history.push('/home')
     } else {
       const createdGuest = await this.props.createGuest(this.state)
       await this.props.handleGuestCheckout(createdGuest.id, this.props.cart)

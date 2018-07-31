@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, Puppy} = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const user = await User.findById(req.body.id)
+    const user = await User.findById(req.body.id, {include: [{model: Puppy}]})
     const updatedUser = await user.update(req.body)
     res.status(202).send(updatedUser)
   } catch (err) {
