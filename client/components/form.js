@@ -5,10 +5,9 @@ import TextField from '@material-ui/core/TextField'
 import StripeCheckout from 'react-stripe-checkout'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
-import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
-
+import {clearCart, handleGuestCheckout, createGuest, clear} from '../store/cart'
 import axios from 'axios'
-
+import store from '../store'
 class Form extends Component {
   constructor(props) {
     super(props)
@@ -47,18 +46,8 @@ class Form extends Component {
         this.props.cart,
         token.id
       )
+      store.dispatch(clear())
     }
-
-    // console.log("token is", token)
-    // fetch('/save-stripe-token', {
-    //   method: 'POST',
-    //   body: JSON.stringify(token),
-    // }).then(response => {
-    //   console.log("response is", response)
-    //   response.json().then(data => {
-    //     alert(`We are in business, ${data.email}`);
-    //   });
-    // });
   }
 
   handleChange(event) {
@@ -136,8 +125,7 @@ class Form extends Component {
 const mapState = state => {
   let total = 0
   let puppiesInCart = []
-  console.log(state.cart[0].length)
-  if (state.cart[0].length) {
+  if (state.cart[0]) {
     puppiesInCart = state.cart.map(id => {
       console.log('ID TO FIND IS', id)
       console.log('CART IS', state.cart)
