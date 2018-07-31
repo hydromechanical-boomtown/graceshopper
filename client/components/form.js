@@ -53,45 +53,52 @@ class Form extends Component {
 
   render() {
     return (
-      <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="First Name"
-          margin="normal"
-          onChange={this.handleChange}
-          name="firstName"
-        />
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="Last Name"
-          margin="normal"
-          onChange={this.handleChange}
-          name="lastName"
-        />
-        {!this.props.user.email && (
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={this.handleSubmit}
+        className="form"
+      >
+        <div style={{backgroundColor: 'white', marginTop: 10}} className="form">
           <TextField
             required
             id="required"
             label="Required"
-            placeholder="Email"
+            placeholder="First Name"
             margin="normal"
             onChange={this.handleChange}
-            name="email"
+            name="firstName"
           />
-        )}
-        <TextField
-          required
-          id="required"
-          label="Required"
-          placeholder="Address"
-          margin="normal"
-          onChange={this.handleChange}
-          name="address"
-        />
+          <TextField
+            required
+            id="required"
+            label="Required"
+            placeholder="Last Name"
+            margin="normal"
+            onChange={this.handleChange}
+            name="lastName"
+          />
+          {!this.props.user.email && (
+            <TextField
+              required
+              id="required"
+              label="Required"
+              placeholder="Email"
+              margin="normal"
+              onChange={this.handleChange}
+              name="email"
+            />
+          )}
+          <TextField
+            required
+            id="required"
+            label="Required"
+            placeholder="Address"
+            margin="normal"
+            onChange={this.handleChange}
+            name="address"
+          />
+        </div>
         <Button variant="contained" color="primary" type="submit">
           Checkout
         </Button>

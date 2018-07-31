@@ -38,7 +38,7 @@ class CartComponent extends Component {
   render() {
     return (
       <div>
-        <Paper>
+        <Paper className="form" style={{marginTop: 10}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -76,7 +76,12 @@ class CartComponent extends Component {
           </Table>
         </Paper>
         <Link to="/cart/checkout">
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            style={{marginTop: 10}}
+          >
             Proceed to checkout
           </Button>
         </Link>

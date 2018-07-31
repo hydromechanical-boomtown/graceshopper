@@ -11,11 +11,10 @@ class PuppyList extends Component {
   render() {
     return (
       <div>
-        <h1>For Sale</h1>
-        <ul>
+        <ul className="container">
           {this.props.puppies.map(puppy => {
             return (
-              <li key={puppy.id}>
+              <li key={puppy.id} className="child">
                 <SinglePuppyListItem puppy={puppy} />
               </li>
             )
