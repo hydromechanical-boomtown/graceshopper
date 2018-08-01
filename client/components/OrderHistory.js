@@ -26,6 +26,7 @@ const OrderHistory = props => {
         style={style.media}
         image={props.puppy.imageURL}
         title={props.puppy.name}
+        className="imageSize"
       />
       <CardContent align="left">
         <Typography variant="display2">{props.puppy.name}</Typography>

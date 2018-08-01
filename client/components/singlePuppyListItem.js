@@ -47,7 +47,9 @@ class SinglePuppyListItemUnconnected extends Component {
   render() {
     return (
       <Card>
-        <img src={this.props.puppy.imageURL} />
+        <Link to={`/puppies/${this.props.puppy.id}`}>
+          <img src={this.props.puppy.imageURL} className="imageSize" />
+        </Link>
         {/* <CardMedia image="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Puppy_on_Halong_Bay.jpg/281px-Puppy_on_Halong_Bay.jpg" /> */}
         <CardContent>
           <Typography gutterBottom variant="headline" component="h2">

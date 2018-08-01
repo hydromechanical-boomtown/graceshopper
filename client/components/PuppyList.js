@@ -25,11 +25,10 @@ class PuppyList extends Component {
     return !this.props.puppies ? (<CircularProgress size={100} style={style.progress} />)
     :(
       <div>
-        <h1>For Sale</h1>
-        <ul>
+        <ul className="container" style={{alignContent: 'center'}}>
           {this.props.puppies.map(puppy => {
             return (
-              <li key={puppy.id}>
+              <li key={puppy.id} className="child">
                 <SinglePuppyListItem puppy={puppy} />
               </li>
             )

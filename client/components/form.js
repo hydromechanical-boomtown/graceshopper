@@ -65,45 +65,49 @@ class Form extends Component {
     return (
       <div>
         <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-          <TextField
-            required={true}
-            id="required"
-            label="Required"
-            placeholder="First Name"
-            margin="normal"
-            onChange={this.handleChange}
-            name="firstName"
-          />
-          <TextField
-            required={true}
-            id="required"
-            label="Required"
-            placeholder="Last Name"
-            margin="normal"
-            onChange={this.handleChange}
-            name="lastName"
-          />
-          {!this.props.user.email && (
+          <div
+            style={{backgroundColor: 'white', marginTop: 10}}
+            className="form"
+          >
             <TextField
               required={true}
               id="required"
               label="Required"
-              placeholder="Email"
+              placeholder="First Name"
               margin="normal"
               onChange={this.handleChange}
-              name="email"
+              name="firstName"
             />
-          )}
-          <TextField
-            required={true}
-            id="required"
-            label="Required"
-            placeholder="Address"
-            margin="normal"
-            onChange={this.handleChange}
-            name="address"
-          />
-
+            <TextField
+              required={true}
+              id="required"
+              label="Required"
+              placeholder="Last Name"
+              margin="normal"
+              onChange={this.handleChange}
+              name="lastName"
+            />
+            {!this.props.user.email && (
+              <TextField
+                required={true}
+                id="required"
+                label="Required"
+                placeholder="Email"
+                margin="normal"
+                onChange={this.handleChange}
+                name="email"
+              />
+            )}
+            <TextField
+              required={true}
+              id="required"
+              label="Required"
+              placeholder="Address"
+              margin="normal"
+              onChange={this.handleChange}
+              name="address"
+            />
+          </div>
           <div>
             <StripeCheckout
               stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"

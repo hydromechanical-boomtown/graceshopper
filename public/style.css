@@ -1,7 +1,7 @@
 body {
   font-family: sans-serif;
+  background-image: url('https://wallpaper-house.com/data/out/6/wallpaper2you_123688.jpg');
 }
-
 a {
   text-decoration: none;
 }
@@ -15,6 +15,18 @@ nav a {
   margin: 1em;
 }
 
+.container {
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 60%;
+}
+
+.form {
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 form div {
   margin: 1em;
   display: inline-block;
@@ -22,4 +34,14 @@ form div {
 
 li {
   list-style-type: none;
+}
+
+.imageSize {
+  height: 80%;
+  width: 100%;
+}
+
+.child {
+  padding-top: 25px;
+  padding-bottom: 25px;
 }

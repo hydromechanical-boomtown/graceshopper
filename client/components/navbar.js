@@ -17,8 +17,12 @@ const Navbar = ({handleClick, isLoggedIn, name}) => (
           <Link to="/home" style={{color: 'white'}}>
             <Button color="inherit">
               {' '}
-              <Typography variant="title" color="inherit">
-                Puppy Store
+              <Typography
+                variant="title"
+                color="inherit"
+                style={{fontWeight: 'bolder', fontStlye: 'italic'}}
+              >
+                Puppers
               </Typography>
             </Button>
           </Link>

@@ -39,10 +39,10 @@ class CartComponent extends Component {
   render() {
     return this.state.loaded ? (
       !this.props.cart.length ? (
-        <h2> Your cart is empty! </h2>
+        <h2 style={{background: 'white', width: 300}}> Your cart is empty! </h2>
       ) : (
         <div>
-          <Paper>
+          <Paper className="form" style={{marginTop: 10}}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -80,7 +80,12 @@ class CartComponent extends Component {
             </Table>
           </Paper>
           <Link to="/cart/checkout">
-            <Button variant="contained" color="primary" type="submit">
+            <Button
+              style={{marginTop: 10}}
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
               Proceed to checkout
             </Button>
           </Link>
