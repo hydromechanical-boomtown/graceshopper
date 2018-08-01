@@ -6,7 +6,6 @@ const {Cart} = require('../db/models')
 router.get('/', async (req, res, next) => {
   try {
     if (req.user) {
-
       const user = req.user.id
       let cart = await Cart.find({
         where: {userId: user}
@@ -40,7 +39,8 @@ router.delete('/', async (req, res, next) => {
 router.put('/', async (req, res, next) => {
   try {
     const user = req.user.id
-    const cart = await Cart.findAll({where: {userId: user}})
+    const cart = await Cart.findOne({where: {userId: user}})
+
     await cart.update(req.body)
     res.sendStatus(202)
   } catch (err) {

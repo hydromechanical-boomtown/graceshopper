@@ -6,6 +6,7 @@ import {Login, Signup, UserHome, Cart, ConnectedForm} from './components'
 import PuppyList from './components/PuppyList'
 import {me} from './store'
 import SinglePuppy from './components/SinglePuppy'
+import GuestOrderHistory from './components/GuestOrderHistory'
 
 /**
  * COMPONENT
@@ -27,6 +28,11 @@ class Routes extends Component {
         <Route exact path="/puppies" component={PuppyList} />
         <Route exact path="/puppies/:puppyId" component={SinglePuppy} />
         <Route exact path="/cart/checkout" component={ConnectedForm} />
+        <Route
+          exact
+          path="/cart/checkout/guest"
+          component={GuestOrderHistory}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
