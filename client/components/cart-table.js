@@ -42,7 +42,7 @@ class CartComponent extends Component {
     console.log(this.props)
     return this.state.loaded ? (
       !this.props.cart.length ? (
-        <h2> Your cart is empty! </h2>
+        <h2 style={{background: 'white', width: 300}}> Your cart is empty! </h2>
       ) : (
         <div>
           <Paper className="form" style={{marginTop: 10}}>
