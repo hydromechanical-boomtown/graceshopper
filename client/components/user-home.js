@@ -15,7 +15,9 @@ export class UserHome extends Component {
     return (
       <React.Fragment>
         <div>
-          <h3>Welcome, {email}</h3>
+          <h1 style={{backgroundColor: 'white', width: 500}}>
+            Welcome, {email}
+          </h1>
         </div>
         {puppies &&
           (!puppies.length ? (
