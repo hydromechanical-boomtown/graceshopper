@@ -1,7 +1,14 @@
 /* global describe beforeEach afterEach it */
 
 import {expect} from 'chai'
-import {fetchPuppies, fetchSinglePuppy} from './puppy'
+import {
+  fetchPuppies,
+  fetchSinglePuppy,
+  receivedPuppies,
+  gotPuppy,
+  sellPuppyAction
+} from './puppy'
+import reducer from './puppy'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import configureMockStore from 'redux-mock-store'
@@ -10,6 +17,44 @@ import history from '../history'
 
 const middlewares = [thunkMiddleware]
 const mockStore = configureMockStore(middlewares)
+
+describe('action creators', () => {
+  let store
+  let mockAxios
+
+  const initialState = {puppy: []}
+
+  beforeEach(() => {
+    mockAxios = new MockAdapter(axios)
+    store = mockStore(initialState)
+  })
+
+  afterEach(() => {
+    mockAxios.restore()
+    store.clearActions()
+  })
+
+  it('receivedPuppies returns proper object', () => {
+    expect(receivedPuppies([{name: 'puppy'}])).to.be.deep.equal({
+      type: 'RECEIVED_PUPPIES',
+      puppyList: [{name: 'puppy'}]
+    })
+  })
+
+  it('gotPuppy returns proper object', () => {
+    expect(gotPuppy({name: 'puppy'})).to.be.deep.equal({
+      type: 'GET_PUPPY',
+      puppy: {name: 'puppy'}
+    })
+  })
+
+  it('sellPuppyAction returns proper object', () => {
+    expect(sellPuppyAction(5)).to.be.deep.equal({
+      type: 'UPDATE_PUPPY',
+      puppyId: 5
+    })
+  })
+})
 
 describe('thunk creators', () => {
   let store
@@ -26,17 +71,6 @@ describe('thunk creators', () => {
     mockAxios.restore()
     store.clearActions()
   })
-
-  // describe('me', () => {
-  //   it('eventually dispatches the GET USER action', async () => {
-  //     const fakeUser = {email: 'Cody'}
-  //     mockAxios.onGet('/auth/me').replyOnce(200, fakeUser)
-  //     await store.dispatch(me())
-  //     const actions = store.getActions()
-  //     expect(actions[0].type).to.be.equal('GET_USER')
-  //     expect(actions[0].user).to.be.deep.equal(fakeUser)
-  //   })
-  // })
 
   describe('puppy', () => {
     it('eventually dispatches the RECIEVED_PUPPIES action', async () => {
@@ -56,5 +90,26 @@ describe('thunk creators', () => {
       expect(actions[0].type).to.be.equal('GET_PUPPY')
       // expect(history.location.pathname).to.be.equal('/login')
     })
+  })
+})
+
+describe('puppy reducer', () => {
+  it('should return initial state', async () => {
+    expect(reducer(undefined, {})).to.deep.equal([])
+  })
+
+  it('received puppies updates state', () => {
+    expect(
+      reducer([], receivedPuppies([{name: 'puppy1'}, {name: 'puppy2'}]))
+    ).to.deep.equal([{name: 'puppy1'}, {name: 'puppy2'}])
+  })
+
+  it('sellPuppyAction should remove puppy from state', () => {
+    expect(
+      reducer(
+        [{id: 1, name: 'puppy1'}, {id: 2, name: 'puppy2'}],
+        sellPuppyAction(1)
+      )
+    ).to.deep.equal([{id: 2, name: 'puppy2'}])
   })
 })

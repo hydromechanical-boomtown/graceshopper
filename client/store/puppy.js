@@ -10,12 +10,12 @@ export const receivedPuppies = puppyList => ({
   puppyList
 })
 
-const gotPuppy = puppy => ({
+export const gotPuppy = puppy => ({
   type: GET_PUPPY,
   puppy
 })
 
-const sellPuppyAction = puppyId => ({
+export const sellPuppyAction = puppyId => ({
   type: SELL_PUPPY,
   puppyId
 })
