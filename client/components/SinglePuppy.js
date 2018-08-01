@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import DeleteIcon from '@material-ui/icons/Delete'
 import store from '../store'
-import {addItem, removeItem} from '../store/cart'
+import {addItem, removeItem, updateCart} from '../store/cart'
 import Divider from '@material-ui/core/Divider'
 const style = {
   progress: {
@@ -36,20 +36,23 @@ class SinglePuppy extends Component {
 
   async componentDidMount() {
     await this.props.fetchSinglePuppy()
-    console.log('PUPPPY', this.props.puppy)
     if (this.props.cart.indexOf(this.props.puppy.id) !== -1) {
       this.setState({isDisabled: true})
     }
   }
 
   removeFromCart(id) {
-    store.dispatch(removeItem(id))
+    this.props.user.id
+      ? this.props.updateCart([...this.props.cart].filter(el => el !== id))
+      : store.dispatch(removeItem(id))
     this.setState({
       isDisabled: false
     })
   }
   addToCart(id) {
-    store.dispatch(addItem(id))
+    this.props.user.id
+      ? this.props.updateCart([...this.props.cart, id])
+      : store.dispatch(addItem(id))
     this.setState({
       isDisabled: true
     })
@@ -114,12 +117,14 @@ const mapState = (state, ownProps) => {
   })
   return {
     puppy: foundPuppy,
-    cart: state.cart
+    cart: state.cart,
+    user: state.user
   }
 }
 const mapDispatch = (dispatch, ownProps) => ({
   fetchSinglePuppy: () =>
-    dispatch(fetchSinglePuppy(Number(ownProps.match.params.puppyId)))
+    dispatch(fetchSinglePuppy(Number(ownProps.match.params.puppyId))),
+  updateCart: cart => dispatch(updateCart(cart))
 })
 const connectedSinglePuppy = connect(mapState, mapDispatch)(SinglePuppy)
 export default connectedSinglePuppy
