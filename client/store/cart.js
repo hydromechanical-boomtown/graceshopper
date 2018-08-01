@@ -32,19 +32,23 @@ export const fetchCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
   const cart = res.data
 
-  dispatch(receivedCart(cart))
+  dispatch(receivedCart(cart.puppies))
 }
 
 //the above should delete a cart if one currently exists (i.e. the person checking out is a user who already has a cart saved to the database)
 export const clearCart = () => async dispatch => {
   const res = await axios.get('/api/carts')
-  console.log('clearCart res cart GET', res.data)
   if (res.data) {
     await axios.delete('api/carts')
   }
   //clears state
   dispatch(clear())
-  console.log('dispatch clear called')
+}
+
+export const updateCart = puppies => async dispatch => {
+  await axios.put('/api/carts', {puppies})
+  const action = receivedCart(puppies)
+  dispatch(action)
 }
 
 export const createGuest = guestInfo => async dispatch => {
@@ -53,15 +57,12 @@ export const createGuest = guestInfo => async dispatch => {
 }
 
 export const handleGuestCheckout = (guestId, cart, token) => dispatch => {
-  console.log('toek in handeleGUestCheckout is', token)
   cart.forEach(async puppyId => {
     await dispatch(sellPuppy(puppyId, guestId, false, token))
   })
-  dispatch(clear())
 
   //1. create a guest in the database
   //2. add the guestId to the puppies the guest is checking out
-  //3. clear the cart on store
 }
 
 const initialState = []
@@ -74,7 +75,7 @@ const cartReducer = function(state = initialState, action) {
       return state.filter(item => item !== action.id)
 
     case RECEIVED_CART:
-      return [...state, ...action.cart.puppies]
+      return [...action.cart]
 
     case CLEAR:
       return initialState
