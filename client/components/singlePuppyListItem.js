@@ -23,7 +23,6 @@ class SinglePuppyListItemUnconnected extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.cart.indexOf(this.props.puppy.id))
     if (this.props.cart.indexOf(this.props.puppy.id) !== -1) {
       this.setState({isDisabled: true})
     }

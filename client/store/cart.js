@@ -43,7 +43,6 @@ export const clearCart = () => async dispatch => {
   }
   //clears state
   dispatch(clear())
-  console.log('dispatch clear called')
 }
 
 export const updateCart = puppies => async dispatch => {
@@ -58,7 +57,6 @@ export const createGuest = guestInfo => async dispatch => {
 }
 
 export const handleGuestCheckout = (guestId, cart, token) => dispatch => {
-  console.log('toek in handeleGUestCheckout is', token)
   cart.forEach(async puppyId => {
     await dispatch(sellPuppy(puppyId, guestId, false, token))
   })

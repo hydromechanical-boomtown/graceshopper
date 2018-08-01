@@ -265,12 +265,7 @@ async function seed() {
   // and store the result that the promise resolves to in a variable! This is nice!
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${puppies.length} puppies`)
-
   console.log(`seeded ${guests.length} guests`)
-
-  console.log(
-    'added puppies using User.addPuppy(puppy) sequelize accessor methods'
-  )
   console.log(`seeded successfully`)
 }
 

@@ -4,9 +4,6 @@ import OrderHistory from './OrderHistory'
 import {clear} from '../store/cart'
 
 class GuestOrderHistory extends Component {
-  componentDidMount() {
-    console.log('GuestOrderHistory mounted', this.props.puppies)
-  }
   componentWillUnmount() {
     this.props.clear()
   }
@@ -15,9 +12,7 @@ class GuestOrderHistory extends Component {
   }
 
   render() {
-    console.log('GuestOrderHistory rendered')
     const {puppies} = this.props
-    console.log('puppies', puppies)
     return puppies.map(puppy => <OrderHistory key={puppy.id} puppy={puppy} />)
   }
 }

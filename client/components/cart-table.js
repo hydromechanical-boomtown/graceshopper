@@ -37,7 +37,6 @@ class CartComponent extends Component {
       : store.dispatch(removeItem(id))
   }
   render() {
-    console.log(this.props)
     return this.state.loaded ? (
       !this.props.cart.length ? (
         <h2> Your cart is empty! </h2>
@@ -94,7 +93,6 @@ class CartComponent extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state.cart, typeof state.cart)
   const puppiesInCart = state.cart
     .map(id => {
       return state.puppies.find(puppy => {
@@ -102,11 +100,9 @@ const mapStateToProps = state => {
       })
     })
     .filter(el => el !== undefined)
-  console.log('puppiesInCart', puppiesInCart)
 
   let total = 0
   puppiesInCart.forEach(elem => {
-    console.log(elem.price, typeof elem.price)
     total += elem.price
   })
 

@@ -36,7 +36,6 @@ class SinglePuppy extends Component {
 
   async componentDidMount() {
     await this.props.fetchSinglePuppy()
-    console.log('PUPPPY', this.props.puppy)
     if (this.props.cart.indexOf(this.props.puppy.id) !== -1) {
       this.setState({isDisabled: true})
     }
