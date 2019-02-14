@@ -2,48 +2,76 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import Button from '@material-ui/core/Button'
+import {Button, Card, TextField} from '@material-ui/core/'
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
+  cardContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '40%',
+    margin: 'auto',
+    marginTop: '20vh',
+    flexBasis: '60%'
+  }
+})
 
 /**
  * COMPONENT
  */
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+  const {name, displayName, handleSubmit, error, classes} = props
 
   return (
-    <div className="container">
-      <form
-        onSubmit={handleSubmit}
-        name={name}
-        style={{backgroundColor: 'white', marginTop: 10}}
-      >
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <Button variant="contained" color="primary" type="submit">
-            {displayName}
-          </Button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      {/* <a
-        href="/auth/google"
-        style={{backgroundColor: 'white', marginTop: 10}}
-        className="form"
-      >
-        {displayName} with Google
-      </a> */}
-    </div>
+    // <div className="container">
+    //   <form
+    //     onSubmit={handleSubmit}
+    //     name={name}
+    //     style={{backgroundColor: 'white', marginTop: 10}}
+    //   >
+    //     <div>
+    //       <label htmlFor="email">
+    //         <small>Email</small>
+    //       </label>
+    //       <input name="email" type="text" />
+    //     </div>
+    //     <div>
+    //       <label htmlFor="password">
+    //         <small>Password</small>
+    //       </label>
+    //       <input name="password" type="password" />
+    //     </div>
+    //     <div>
+    //       <Button variant="contained" color="primary" type="submit">
+    //         {displayName}
+    //       </Button>
+    //     </div>
+    //     {error && error.response && <div> {error.response.data} </div>}
+    //   </form>
+    //   {/* <a
+    //     href="/auth/google"
+    //     style={{backgroundColor: 'white', marginTop: 10}}
+    //     className="form"
+    //   >
+    //     {displayName} with Google
+    //   </a> */}
+    // </div>
+    <form onSubmit={handleSubmit} name={name}>
+      <Card className={classes.cardContainer}>
+        <TextField id="email" label="Email" name="email" variant="outLined" />
+        <TextField
+          id="password"
+          label="Password"
+          name="password"
+          type="password"
+          variant="outlined"
+          required
+        />
+        <Button variant="contained" color="primary" type="submit">
+          {displayName}
+        </Button>
+      </Card>
+    </form>
   )
 }
 
@@ -82,8 +110,12 @@ const mapDispatch = dispatch => {
   }
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
+export const Login = withStyles(styles)(
+  connect(mapLogin, mapDispatch)(AuthForm)
+)
+export const Signup = withStyles(styles)(
+  connect(mapSignup, mapDispatch)(AuthForm)
+)
 
 /**
  * PROP TYPES
