@@ -2,17 +2,26 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import {Button, Card, TextField} from '@material-ui/core/'
+import {Button, Card, TextField, Typography} from '@material-ui/core/'
 import {withStyles} from '@material-ui/core/styles'
 
 const styles = theme => ({
   cardContainer: {
-    display: 'flex',
-    flexDirection: 'column',
     width: '40%',
-    margin: 'auto',
-    marginTop: '20vh',
-    flexBasis: '60%'
+    margin: 'auto'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  textInput: {
+    margin: 'auto'
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: theme.spacing.unit
   }
 })
 
@@ -56,22 +65,41 @@ const AuthForm = props => {
     //     {displayName} with Google
     //   </a> */}
     // </div>
-    <form onSubmit={handleSubmit} name={name}>
-      <Card className={classes.cardContainer}>
-        <TextField id="email" label="Email" name="email" variant="outLined" />
+    <Card className={classes.cardContainer}>
+      <form className={classes.form} onSubmit={handleSubmit} name={name}>
         <TextField
+          className={classes.textInput}
+          id="email"
+          label="Email"
+          name="email"
+          variant="outlined"
+          margin="normal"
+          error={error}
+        />
+        <TextField
+          className={classes.textInput}
           id="password"
           label="Password"
           name="password"
           type="password"
           variant="outlined"
-          required
+          error={error}
         />
-        <Button variant="contained" color="primary" type="submit">
-          {displayName}
-        </Button>
-      </Card>
-    </form>
+        {error && error.response && (
+          <Typography> {error.response.data} </Typography>
+        )}
+        <div>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            {displayName}
+          </Button>
+        </div>
+      </form>
+    </Card>
   )
 }
 
@@ -111,10 +139,16 @@ const mapDispatch = dispatch => {
 }
 
 export const Login = withStyles(styles)(
-  connect(mapLogin, mapDispatch)(AuthForm)
+  connect(
+    mapLogin,
+    mapDispatch
+  )(AuthForm)
 )
 export const Signup = withStyles(styles)(
-  connect(mapSignup, mapDispatch)(AuthForm)
+  connect(
+    mapSignup,
+    mapDispatch
+  )(AuthForm)
 )
 
 /**

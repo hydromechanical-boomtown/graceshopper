@@ -1,11 +1,12 @@
 body {
   font-family: sans-serif;
   background-image: url('https://wallpaper-house.com/data/out/6/wallpaper2you_123688.jpg');
+  margin: 0;
 }
 a {
   text-decoration: none;
 }
-
+/*
 label {
   display: block;
 }
@@ -44,4 +45,4 @@ li {
 .child {
   padding-top: 25px;
   padding-bottom: 25px;
-}
+} */

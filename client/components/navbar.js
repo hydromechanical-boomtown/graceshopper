@@ -1,65 +1,98 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link as RouterLink} from 'react-router-dom'
 import {logout} from '../store'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import {withStyles} from '@material-ui/core/styles'
+import {AppBar, Toolbar, Typography, Button} from '@material-ui/core'
 
-const Navbar = ({handleClick, isLoggedIn, name}) => (
-  <div>
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Link to="/home" style={{color: 'white'}}>
-            <Button color="inherit">
-              {' '}
-              <Typography
-                variant="title"
-                color="inherit"
-                style={{fontWeight: 'bolder', fontStlye: 'italic'}}
-              >
-                Puppers
-              </Typography>
-            </Button>
-          </Link>
-          {!isLoggedIn && (
-            <div>
-              <Link to="/login" style={{color: 'white'}}>
-                <Button color="inherit">Login</Button>
-              </Link>
-              <Link to="/signup" style={{color: 'white'}}>
-                <Button color="inherit">Sign Up</Button>
-              </Link>
-            </div>
-          )}
-          {isLoggedIn && (
-            <React.Fragment>
-              <div>
-                <p>Hi, {name}</p>
-              </div>
-              <Link to="/logout" style={{color: 'white'}}>
-                <Button color="inherit" onClick={handleClick}>
-                  Log Out
-                </Button>
-              </Link>
-            </React.Fragment>
-          )}
-          <Link to="/puppies" style={{color: 'white'}}>
-            <Button color="inherit">Puppies</Button>
-          </Link>
-          <div>
-            <Link to="/cart" style={{color: 'white'}}>
-              <Button color="inherit">Cart</Button>
-            </Link>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  </div>
+const styles = theme => ({
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  button: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  }
+})
+
+const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
+  <AppBar position="static">
+    <Toolbar className={classes.toolbar}>
+      <div>
+        <Button
+          className={classes.button}
+          component={RouterLink}
+          to="/home"
+          color="inherit"
+        >
+          {' '}
+          <Typography
+            variant="title"
+            color="inherit"
+            style={{fontWeight: 'bolder', fontStlye: 'italic'}}
+          >
+            Puppers
+          </Typography>
+        </Button>
+        <Button
+          className={classes.button}
+          component={RouterLink}
+          to="/puppies"
+          color="inherit"
+        >
+          Puppies
+        </Button>
+        <Button
+          className={classes.button}
+          component={RouterLink}
+          to="/cart"
+          color="inherit"
+        >
+          Cart
+        </Button>
+      </div>
+
+      {!isLoggedIn && (
+        <div>
+          <Button
+            className={classes.button}
+            component={RouterLink}
+            to="/login"
+            color="inherit"
+          >
+            Login
+          </Button>
+          <Button
+            className={classes.button}
+            component={RouterLink}
+            to="/signup"
+            color="inherit"
+          >
+            Sign Up
+          </Button>
+        </div>
+      )}
+      {isLoggedIn && (
+        <div>
+          <Typography variant="subtitle2" inline color="inherit">
+            Welcome back {email}
+          </Typography>
+          <Button
+            className={classes.button}
+            component={RouterLink}
+            to="/logout"
+            color="inherit"
+            onClick={handleClick}
+          >
+            Log Out
+          </Button>
+        </div>
+      )}
+    </Toolbar>
+  </AppBar>
 )
 
 /**
@@ -68,7 +101,7 @@ const Navbar = ({handleClick, isLoggedIn, name}) => (
 const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
-    name: state.user.firstName
+    email: state.user.email
   }
 }
 
@@ -80,7 +113,12 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withStyles(styles)(
+  connect(
+    mapState,
+    mapDispatch
+  )(Navbar)
+)
 
 /**
  * PROP TYPES
