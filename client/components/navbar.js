@@ -6,7 +6,7 @@ import {logout} from '../store'
 import {withStyles} from '@material-ui/core/styles'
 import {AppBar, Toolbar, Typography, Button} from '@material-ui/core'
 import {Logout} from 'mdi-material-ui'
-import {ShoppingCart} from '@material-ui/icons'
+import {ShoppingCart, AccountCircle} from '@material-ui/icons'
 
 const styles = theme => ({
   toolbar: {
@@ -65,7 +65,7 @@ const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
         {isLoggedIn && (
           <div>
             <Typography variant="subtitle2" inline color="inherit">
-              Welcome back {email}
+              <AccountCircle /> {email}
             </Typography>
             <Button
               className={classes.button}

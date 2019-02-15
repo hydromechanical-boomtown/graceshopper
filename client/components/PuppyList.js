@@ -23,49 +23,26 @@ const styles = theme => ({
   }
 })
 
-class PuppyList extends Component {
-  componentDidMount() {
-    this.props.fetchPuppies()
-  }
-
-  render() {
-    const {puppies, classes} = this.props
-    return puppies.length < 1 ? (
-      <div className={classes.progess}>
-        <CircularProgress />
-      </div>
-    ) : (
-      <Grid container direction="row" className={classes.container}>
-        {this.props.puppies.map(puppy => {
-          return (
-            <Grid
-              item
-              key={puppy.id}
-              md={4}
-              sm={6}
-              xs={12}
-              className={classes.item}
-            >
-              <SinglePuppyListItem puppy={puppy} />
-            </Grid>
-          )
-        })}
-      </Grid>
-    )
-  }
+const PuppyList = props => {
+  const {classes, puppies} = props
+  return (
+    <Grid container direction="row" className={classes.container}>
+      {puppies.map(puppy => {
+        return (
+          <Grid
+            item
+            key={puppy.id}
+            md={4}
+            sm={6}
+            xs={12}
+            className={classes.item}
+          >
+            <SinglePuppyListItem puppy={puppy} />
+          </Grid>
+        )
+      })}
+    </Grid>
+  )
 }
 
-const mapState = state => ({
-  puppies: state.puppies
-})
-
-const mapDispatch = dispatch => ({
-  fetchPuppies: () => dispatch(fetchPuppies())
-})
-
-export default withStyles(styles)(
-  connect(
-    mapState,
-    mapDispatch
-  )(PuppyList)
-)
+export default withStyles(styles)(PuppyList)

@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PuppyList from './PuppyList'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
@@ -12,6 +13,30 @@ export class UserHome extends Component {
   }
   render() {
     const {email, puppies} = this.props
+    // return (
+    //   <React.Fragment>
+    //     <div>
+    //       <h1 style={{backgroundColor: 'white', width: 500}}>
+    //         Welcome, {email}
+    //       </h1>
+    //     </div>
+    //     {puppies &&
+    //       (!puppies.length ? (
+    //         <Typography variant="display2">
+    //           You don't own any puppies.
+    //         </Typography>
+    //       ) : (
+    //         <React.Fragment>
+    //           <Typography variant="display2">
+    //             These are the puppies you love.
+    //           </Typography>
+    //           {puppies.map(puppy => (
+    //             <OrderHistory key={puppy.id} puppy={puppy} />
+    //           ))}
+    //         </React.Fragment>
+    //       ))}
+    //   </React.Fragment>
+    // )
     return (
       <React.Fragment>
         <div>
@@ -29,9 +54,7 @@ export class UserHome extends Component {
               <Typography variant="display2">
                 These are the puppies you love.
               </Typography>
-              {puppies.map(puppy => (
-                <OrderHistory key={puppy.id} puppy={puppy} />
-              ))}
+              <PuppyList puppies={puppies} />
             </React.Fragment>
           ))}
       </React.Fragment>
@@ -52,7 +75,10 @@ const mapDispatch = dispatch => ({
   me: () => dispatch(me())
 })
 
-export default connect(mapState, mapDispatch)(UserHome)
+export default connect(
+  mapState,
+  mapDispatch
+)(UserHome)
 
 /**
  * PROP TYPES
