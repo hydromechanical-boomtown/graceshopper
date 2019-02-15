@@ -2,26 +2,44 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import {Button, Card, TextField, Typography} from '@material-ui/core/'
+import {
+  Button,
+  Card,
+  TextField,
+  Typography,
+  IconButton
+} from '@material-ui/core/'
+import {Google, GithubCircle, TwitterCircle, Twitter} from 'mdi-material-ui'
 import {withStyles} from '@material-ui/core/styles'
 
 const styles = theme => ({
   cardContainer: {
     width: '40%',
-    margin: 'auto'
+    margin: 'auto',
+    marginTop: theme.spacing.unit * 10
   },
   form: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2
   },
   textInput: {
-    margin: 'auto'
+    margin: 'auto',
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
-  buttons: {
+  buttonsContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: theme.spacing.unit
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  loginBtn: {
+    height: '2.5em'
   }
 })
 
@@ -73,7 +91,7 @@ const AuthForm = props => {
           label="Email"
           name="email"
           variant="outlined"
-          margin="normal"
+          margin="dense"
           error={error}
         />
         <TextField
@@ -83,15 +101,23 @@ const AuthForm = props => {
           name="password"
           type="password"
           variant="outlined"
+          margin="dense"
           error={error}
         />
         {error && error.response && (
           <Typography> {error.response.data} </Typography>
         )}
-        <div>
+        <div className={classes.buttonsContainer}>
+          <div>
+            <Typography>{displayName} With</Typography>
+            <IconButton component={Google} />
+            <IconButton component={GithubCircle} />
+            <IconButton component={TwitterCircle} />
+          </div>
           <Button
-            className={classes.button}
+            className={classes.loginBtn}
             variant="contained"
+            size="small"
             color="primary"
             type="submit"
           >

@@ -5,6 +5,8 @@ import {Link as RouterLink} from 'react-router-dom'
 import {logout} from '../store'
 import {withStyles} from '@material-ui/core/styles'
 import {AppBar, Toolbar, Typography, Button} from '@material-ui/core'
+import {Logout} from 'mdi-material-ui'
+import {ShoppingCart} from '@material-ui/icons'
 
 const styles = theme => ({
   toolbar: {
@@ -15,6 +17,9 @@ const styles = theme => ({
   button: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit
+  },
+  icon: {
+    marginLeft: theme.spacing.unit
   }
 })
 
@@ -37,6 +42,45 @@ const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
             Puppers
           </Typography>
         </Button>
+        {!isLoggedIn && (
+          <div>
+            <Button
+              className={classes.button}
+              component={RouterLink}
+              to="/login"
+              color="inherit"
+            >
+              Login
+            </Button>
+            <Button
+              className={classes.button}
+              component={RouterLink}
+              to="/signup"
+              color="inherit"
+            >
+              Sign Up
+            </Button>
+          </div>
+        )}
+        {isLoggedIn && (
+          <div>
+            <Typography variant="subtitle2" inline color="inherit">
+              Welcome back {email}
+            </Typography>
+            <Button
+              className={classes.button}
+              component={RouterLink}
+              to="/logout"
+              color="inherit"
+              onClick={handleClick}
+            >
+              Log Out
+              <Logout />
+            </Button>
+          </div>
+        )}
+      </div>
+      <div>
         <Button
           className={classes.button}
           component={RouterLink}
@@ -51,46 +95,9 @@ const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
           to="/cart"
           color="inherit"
         >
-          Cart
+          Cart <ShoppingCart className={classes.icon} />
         </Button>
       </div>
-
-      {!isLoggedIn && (
-        <div>
-          <Button
-            className={classes.button}
-            component={RouterLink}
-            to="/login"
-            color="inherit"
-          >
-            Login
-          </Button>
-          <Button
-            className={classes.button}
-            component={RouterLink}
-            to="/signup"
-            color="inherit"
-          >
-            Sign Up
-          </Button>
-        </div>
-      )}
-      {isLoggedIn && (
-        <div>
-          <Typography variant="subtitle2" inline color="inherit">
-            Welcome back {email}
-          </Typography>
-          <Button
-            className={classes.button}
-            component={RouterLink}
-            to="/logout"
-            color="inherit"
-            onClick={handleClick}
-          >
-            Log Out
-          </Button>
-        </div>
-      )}
     </Toolbar>
   </AppBar>
 )
