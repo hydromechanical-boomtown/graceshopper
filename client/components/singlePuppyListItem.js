@@ -16,14 +16,18 @@ import {addItem, removeItem, updateCart} from '../store/cart'
 import store from '../store'
 import {withStyles} from '@material-ui/core/styles'
 
-const styles = {
+const styles = theme => ({
   card: {
-    maxWidth: 350
+    maxWidth: 350,
+    paddingLeft: theme.spacing.unit * 0.5,
+    paddingRight: theme.spacing.unit * 0.5,
+    paddingTop: theme.spacing.unit * 0.5
   },
   media: {
-    height: 200
+    height: 200,
+    objectFit: 'cover'
   }
-}
+})
 
 class SinglePuppyListItemUnconnected extends Component {
   constructor() {
@@ -64,6 +68,7 @@ class SinglePuppyListItemUnconnected extends Component {
         <CardActionArea>
           <CardMedia
             className={classes.media}
+            component="img"
             image={puppy.imageURL}
             title={puppy.name}
           />
@@ -102,7 +107,7 @@ class SinglePuppyListItemUnconnected extends Component {
             size="small"
             color="primary"
           >
-            See More
+            More Info
           </Button>
         </CardActions>
       </Card>
