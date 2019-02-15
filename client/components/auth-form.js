@@ -9,7 +9,7 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core/'
-import {Google, GithubCircle, TwitterCircle, Twitter} from 'mdi-material-ui'
+import {Google, GithubCircle, TwitterCircle} from 'mdi-material-ui'
 import {withStyles} from '@material-ui/core/styles'
 
 const styles = theme => ({
@@ -50,39 +50,6 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error, classes} = props
 
   return (
-    // <div className="container">
-    //   <form
-    //     onSubmit={handleSubmit}
-    //     name={name}
-    //     style={{backgroundColor: 'white', marginTop: 10}}
-    //   >
-    //     <div>
-    //       <label htmlFor="email">
-    //         <small>Email</small>
-    //       </label>
-    //       <input name="email" type="text" />
-    //     </div>
-    //     <div>
-    //       <label htmlFor="password">
-    //         <small>Password</small>
-    //       </label>
-    //       <input name="password" type="password" />
-    //     </div>
-    //     <div>
-    //       <Button variant="contained" color="primary" type="submit">
-    //         {displayName}
-    //       </Button>
-    //     </div>
-    //     {error && error.response && <div> {error.response.data} </div>}
-    //   </form>
-    //   {/* <a
-    //     href="/auth/google"
-    //     style={{backgroundColor: 'white', marginTop: 10}}
-    //     className="form"
-    //   >
-    //     {displayName} with Google
-    //   </a> */}
-    // </div>
     <Card className={classes.cardContainer}>
       <form className={classes.form} onSubmit={handleSubmit} name={name}>
         <TextField
