@@ -38,10 +38,10 @@ async function seed() {
     })
   ])
 
-  console.log(`seeded ${users.length} users`)
-  console.log(`seeded ${puppies.length} puppies`)
-  console.log(`seeded ${guests.length} guests`)
-  console.log(`seeded successfully`)
+  // console.log(`seeded ${users.length} users`)
+  // console.log(`seeded ${puppies.length} puppies`)
+  // console.log(`seeded ${guests.length} guests`)
+  // console.log(`seeded successfully`)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
