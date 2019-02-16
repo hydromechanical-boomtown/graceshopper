@@ -1,18 +1,36 @@
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableFooter,
+  TableRow,
+  Paper,
+  IconButton,
+  Button,
+  Typography
+} from '@material-ui/core'
+import {Delete, Close} from '@material-ui/icons'
 import store from '../store'
 import {removeItem, fetchCart, updateCart} from '../store/cart'
 import {fetchPuppies} from '../store/puppy'
-import Button from '@material-ui/core/Button'
 import {Link} from 'react-router-dom'
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
+  table: {
+    // minHeight: 250
+  },
+  rows: {
+    height: 80
+  },
+  cells: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit * 1.5
+  }
+})
 
 class CartComponent extends Component {
   constructor(props) {
@@ -23,9 +41,7 @@ class CartComponent extends Component {
 
   componentDidMount() {
     this.props.fetchPuppies()
-
     if (this.props.user.id) this.props.fetchCart()
-
     this.setState({
       loaded: true
     })
@@ -37,60 +53,64 @@ class CartComponent extends Component {
       : store.dispatch(removeItem(id))
   }
   render() {
+    const {cart, classes, toggleDrawer} = this.props
+    console.log(this.props)
     return this.state.loaded ? (
-      !this.props.cart.length ? (
-        <h2 style={{background: 'white', width: 300}}> Your cart is empty! </h2>
-      ) : (
-        <div>
-          <Paper className="form" style={{marginTop: 10}}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Puppy in Cart</TableCell>
-                  <TableCell>Remove</TableCell>
-                  <TableCell>Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {this.props.puppies.map(puppy => {
-                  return (
-                    <TableRow key={puppy.id}>
-                      <TableCell component="th" scope="row">
-                        {puppy.name}
-                      </TableCell>
-                      <TableCell>
-                        {' '}
-                        <IconButton
-                          aria-label="Delete"
-                          onClick={() => {
-                            this.removeFromCart(puppy.id)
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>{' '}
-                      </TableCell>
-                      <TableCell numeric>{puppy.price}</TableCell>
-                    </TableRow>
-                  )
-                })}
-                <TableRow>
-                  <TableCell numeric>Total: {this.props.total}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </Paper>
-          <Link to="/cart/checkout">
-            <Button
-              style={{marginTop: 10}}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Proceed to checkout
-            </Button>
-          </Link>
-        </div>
-      )
+      <div>
+        <Paper>
+          <IconButton component={Close} onClick={toggleDrawer} />
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Puppy in Cart</TableCell>
+                <TableCell>Remove</TableCell>
+                <TableCell>Price</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.puppies.map(puppy => {
+                return (
+                  <TableRow className={classes.rows} key={puppy.id}>
+                    <TableCell className={classes.cells} scope="row">
+                      {puppy.name}
+                    </TableCell>
+                    <TableCell>
+                      {' '}
+                      <IconButton
+                        component={Delete}
+                        aria-label="Delete"
+                        onClick={() => {
+                          this.removeFromCart(puppy.id)
+                        }}
+                      />{' '}
+                    </TableCell>
+                    <TableCell align="left">${puppy.price}</TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell align="left">
+                  <Typography>Total: ${this.props.total}</Typography>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </Paper>
+
+        <Button
+          component={Link}
+          to="/cart/checkout"
+          style={{marginTop: 10}}
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={cart.length < 1}
+        >
+          Proceed to checkout
+        </Button>
+      </div>
     ) : (
       <h2>Loading....</h2>
     )
@@ -124,4 +144,9 @@ const mapDispatchToProps = dispatch => ({
   updateCart: cart => dispatch(updateCart(cart))
 })
 
-export const Cart = connect(mapStateToProps, mapDispatchToProps)(CartComponent)
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CartComponent)
+)

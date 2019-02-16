@@ -1,12 +1,20 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link as RouterLink} from 'react-router-dom'
 import {logout} from '../store'
 import {withStyles} from '@material-ui/core/styles'
-import {AppBar, Toolbar, Typography, Button} from '@material-ui/core'
-import {Logout} from 'mdi-material-ui'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Drawer,
+  IconButton
+} from '@material-ui/core'
+import {Logout, CartOutline} from 'mdi-material-ui'
 import {ShoppingCart, AccountCircle} from '@material-ui/icons'
+import Cart from './cart-table'
 
 const styles = theme => ({
   toolbar: {
@@ -19,88 +27,115 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   icon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
+    color: 'inherit'
   }
 })
 
-const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
-  <AppBar position="static">
-    <Toolbar className={classes.toolbar}>
-      <div>
-        <Button
-          className={classes.button}
-          component={RouterLink}
-          to="/home"
-          color="inherit"
-        >
-          {' '}
-          <Typography
-            variant="title"
-            color="inherit"
-            style={{fontWeight: 'bolder', fontStlye: 'italic'}}
-          >
-            Puppers
-          </Typography>
-        </Button>
-        {!isLoggedIn && (
+class Navbar extends Component {
+  state = {
+    isOpen: false
+  }
+
+  toggleDrawer = () => {
+    console.log(this.state.isOpen)
+    this.setState(prevState => ({isOpen: !prevState.isOpen}))
+  }
+  render() {
+    const {handleClick, isLoggedIn, email, classes, cart} = this.props
+
+    return (
+      <AppBar position="static">
+        <Toolbar className={classes.toolbar}>
           <div>
             <Button
               className={classes.button}
               component={RouterLink}
-              to="/login"
+              to="/home"
               color="inherit"
             >
-              Login
+              {' '}
+              <Typography
+                variant="title"
+                color="inherit"
+                style={{fontWeight: 'bolder', fontStlye: 'italic'}}
+              >
+                Puppers
+              </Typography>
             </Button>
-            <Button
-              className={classes.button}
-              component={RouterLink}
-              to="/signup"
-              color="inherit"
-            >
-              Sign Up
-            </Button>
+            {!isLoggedIn && (
+              <div>
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/login"
+                  color="inherit"
+                >
+                  Login
+                </Button>
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/signup"
+                  color="inherit"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
+            {isLoggedIn && (
+              <div>
+                <Typography variant="subtitle2" inline color="inherit">
+                  <AccountCircle /> {email}
+                </Typography>
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/logout"
+                  color="inherit"
+                  onClick={handleClick}
+                >
+                  Log Out
+                  <Logout />
+                </Button>
+              </div>
+            )}
           </div>
-        )}
-        {isLoggedIn && (
           <div>
-            <Typography variant="subtitle2" inline color="inherit">
-              <AccountCircle /> {email}
-            </Typography>
             <Button
               className={classes.button}
               component={RouterLink}
-              to="/logout"
+              to="/puppies"
               color="inherit"
-              onClick={handleClick}
             >
-              Log Out
-              <Logout />
+              Puppies
             </Button>
+            {cart.length < 1 ? (
+              <IconButton
+                className={classes.icon}
+                component={CartOutline}
+                onClick={this.toggleDrawer}
+              />
+            ) : (
+              <IconButton
+                className={classes.icon}
+                component={ShoppingCart}
+                onClick={this.toggleDrawer}
+              />
+            )}
+            <Drawer
+              open={this.state.isOpen}
+              anchor="right"
+              onClose={this.toggleDrawer}
+            >
+              <Cart toggleDrawer={this.toggleDrawer} />
+            </Drawer>
           </div>
-        )}
-      </div>
-      <div>
-        <Button
-          className={classes.button}
-          component={RouterLink}
-          to="/puppies"
-          color="inherit"
-        >
-          Puppies
-        </Button>
-        <Button
-          className={classes.button}
-          component={RouterLink}
-          to="/cart"
-          color="inherit"
-        >
-          Cart <ShoppingCart className={classes.icon} />
-        </Button>
-      </div>
-    </Toolbar>
-  </AppBar>
-)
+        </Toolbar>
+      </AppBar>
+    )
+  }
+}
 
 /**
  * CONTAINER
@@ -108,7 +143,8 @@ const Navbar = ({handleClick, isLoggedIn, email, classes}) => (
 const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
-    email: state.user.email
+    email: state.user.email,
+    cart: state.cart
   }
 }
 

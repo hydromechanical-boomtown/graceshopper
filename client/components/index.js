@@ -6,7 +6,7 @@
 export {default as Navbar} from './navbar'
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
-export {Cart} from './cart-table'
+export {default as Cart} from './cart-table'
 export {default as PuppyList} from './PuppyList'
 export {default as singlePuppyListItem} from './singlePuppyListItem'
 export {ConnectedForm} from './form'
