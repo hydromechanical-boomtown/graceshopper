@@ -54,7 +54,6 @@ class CartComponent extends Component {
   }
   render() {
     const {cart, classes, toggleDrawer} = this.props
-    console.log(this.props)
     return this.state.loaded ? (
       <div>
         <Paper>
@@ -100,9 +99,9 @@ class CartComponent extends Component {
         </Paper>
 
         <Button
+          onClick={() => toggleDrawer()}
           component={Link}
           to="/cart/checkout"
-          style={{marginTop: 10}}
           variant="contained"
           color="primary"
           type="submit"

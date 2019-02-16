@@ -7,7 +7,7 @@ import {
   Signup,
   UserHome,
   Cart,
-  ConnectedForm,
+  CheckoutForm,
   Puppies
 } from './components'
 import {me} from './store'
@@ -33,7 +33,7 @@ class Routes extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/puppies" component={Puppies} />
         <Route exact path="/puppies/:puppyId" component={SinglePuppy} />
-        <Route exact path="/cart/checkout" component={ConnectedForm} />
+        <Route exact path="/cart/checkout" component={CheckoutForm} />
         <Route
           exact
           path="/cart/checkout/guest"

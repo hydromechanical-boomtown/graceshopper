@@ -4,7 +4,6 @@ import history from '../history'
 import {mergeCart, fetchCart, clear} from './cart'
 import {fetchPuppies} from './puppy'
 
-
 /**
  * ACTION TYPES
  */
@@ -50,6 +49,7 @@ export const auth = (email, password, method) => async dispatch => {
   let res
   try {
     res = await axios.post(`/auth/${method}`, {email, password})
+    dispatch(me())
   } catch (authError) {
     return dispatch(getUser({error: authError}))
   }
