@@ -77,33 +77,35 @@ class SinglePuppyListItemUnconnected extends Component {
           </Typography>
         </CardActionArea>
         <CardContent>
-          <Typography component="p">Breed: {this.props.puppy.breed}</Typography>
-          <Typography component="p">Age: {this.props.puppy.age}</Typography>
-          <Typography component="p">Price: {this.props.puppy.price}</Typography>
+          <Typography component="p">Breed: {puppy.breed}</Typography>
+          <Typography component="p">Age: {puppy.age}</Typography>
+          <Typography component="p">Price: {puppy.price}</Typography>
         </CardContent>
         <CardActions>
-          {!this.state.isDisabled ? (
-            <IconButton
-              component={AddShoppingCart}
-              color="primary"
-              aria-label="Add to shopping cart"
-              onClick={() => {
-                this.addToCart(this.props.puppy.id)
-              }}
-            />
-          ) : (
-            <IconButton
-              component={RemoveShoppingCart}
-              aria-label="Delete"
-              color="primary"
-              onClick={() => {
-                this.removeFromCart(this.props.puppy.id)
-              }}
-            />
-          )}
+          {!puppy.userId &&
+            (!this.state.isDisabled ? (
+              <IconButton
+                component={AddShoppingCart}
+                color="primary"
+                aria-label="Add to shopping cart"
+                onClick={() => {
+                  this.addToCart(puppy.id)
+                }}
+              />
+            ) : (
+              <IconButton
+                component={RemoveShoppingCart}
+                aria-label="Delete"
+                color="primary"
+                onClick={() => {
+                  this.removeFromCart(puppy.id)
+                }}
+              />
+            ))}
+
           <Button
             component={Link}
-            to={`/puppies/${this.props.puppy.id}`}
+            to={`/puppies/${puppy.id}`}
             size="small"
             color="primary"
           >
