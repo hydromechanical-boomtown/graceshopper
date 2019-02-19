@@ -6,7 +6,10 @@ const User = db.define('user', {
   email: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
   },
   password: {
     type: Sequelize.STRING,
@@ -23,22 +26,20 @@ const User = db.define('user', {
     }
   },
   firstName: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING
   },
   lastName: {
-    type: Sequelize.STRING,  
+    type: Sequelize.STRING
   },
   address: {
-    type:Sequelize.STRING,
+    type: Sequelize.STRING
   },
-googleId: {
-  type: Sequelize.STRING
-},
-
-githubId: {
-  type: Sequelize.STRING
-}
-
+  googleId: {
+    type: Sequelize.STRING
+  },
+  githubId: {
+    type: Sequelize.STRING
+  }
 })
 module.exports = User
 

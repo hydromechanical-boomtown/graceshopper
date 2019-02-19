@@ -1,21 +1,59 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link as RouterLink} from 'react-router-dom'
 import {logout} from '../store'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import {withStyles} from '@material-ui/core/styles'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Drawer,
+  IconButton
+} from '@material-ui/core'
+import {Logout, CartOutline} from 'mdi-material-ui'
+import {ShoppingCart, AccountCircle} from '@material-ui/icons'
+import Cart from './cart-table'
 
-const Navbar = ({handleClick, isLoggedIn, name}) => (
-  <div>
-    <div>
+const styles = theme => ({
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  button: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  icon: {
+    marginLeft: theme.spacing.unit,
+    color: 'inherit'
+  }
+})
+
+class Navbar extends Component {
+  state = {
+    isOpen: false
+  }
+
+  toggleDrawer = () => {
+    console.log(this.state.isOpen)
+    this.setState(prevState => ({isOpen: !prevState.isOpen}))
+  }
+  render() {
+    const {handleClick, isLoggedIn, email, classes, cart} = this.props
+
+    return (
       <AppBar position="static">
-        <Toolbar>
-          <Link to="/home" style={{color: 'white'}}>
-            <Button color="inherit">
+        <Toolbar className={classes.toolbar}>
+          <div>
+            <Button
+              className={classes.button}
+              component={RouterLink}
+              to="/home"
+              color="inherit"
+            >
               {' '}
               <Typography
                 variant="title"
@@ -25,42 +63,79 @@ const Navbar = ({handleClick, isLoggedIn, name}) => (
                 Puppers
               </Typography>
             </Button>
-          </Link>
-          {!isLoggedIn && (
-            <div>
-              <Link to="/login" style={{color: 'white'}}>
-                <Button color="inherit">Login</Button>
-              </Link>
-              <Link to="/signup" style={{color: 'white'}}>
-                <Button color="inherit">Sign Up</Button>
-              </Link>
-            </div>
-          )}
-          {isLoggedIn && (
-            <React.Fragment>
+            {!isLoggedIn && (
               <div>
-                <p>Hi, {name}</p>
-              </div>
-              <Link to="/logout" style={{color: 'white'}}>
-                <Button color="inherit" onClick={handleClick}>
-                  Log Out
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/login"
+                  color="inherit"
+                >
+                  Login
                 </Button>
-              </Link>
-            </React.Fragment>
-          )}
-          <Link to="/puppies" style={{color: 'white'}}>
-            <Button color="inherit">Puppies</Button>
-          </Link>
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/signup"
+                  color="inherit"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
+            {isLoggedIn && (
+              <div>
+                <Typography variant="subtitle2" inline color="inherit">
+                  <AccountCircle /> {email}
+                </Typography>
+                <Button
+                  className={classes.button}
+                  component={RouterLink}
+                  to="/logout"
+                  color="inherit"
+                  onClick={handleClick}
+                >
+                  Log Out
+                  <Logout />
+                </Button>
+              </div>
+            )}
+          </div>
           <div>
-            <Link to="/cart" style={{color: 'white'}}>
-              <Button color="inherit">Cart</Button>
-            </Link>
+            <Button
+              className={classes.button}
+              component={RouterLink}
+              to="/puppies"
+              color="inherit"
+            >
+              Puppies
+            </Button>
+            {cart.length < 1 ? (
+              <IconButton
+                className={classes.icon}
+                component={CartOutline}
+                onClick={this.toggleDrawer}
+              />
+            ) : (
+              <IconButton
+                className={classes.icon}
+                component={ShoppingCart}
+                onClick={this.toggleDrawer}
+              />
+            )}
+            <Drawer
+              open={this.state.isOpen}
+              anchor="right"
+              onClose={this.toggleDrawer}
+            >
+              <Cart toggleDrawer={this.toggleDrawer} />
+            </Drawer>
           </div>
         </Toolbar>
       </AppBar>
-    </div>
-  </div>
-)
+    )
+  }
+}
 
 /**
  * CONTAINER
@@ -68,7 +143,8 @@ const Navbar = ({handleClick, isLoggedIn, name}) => (
 const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
-    name: state.user.firstName
+    email: state.user.email,
+    cart: state.cart
   }
 }
 
@@ -80,7 +156,12 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withStyles(styles)(
+  connect(
+    mapState,
+    mapDispatch
+  )(Navbar)
+)
 
 /**
  * PROP TYPES

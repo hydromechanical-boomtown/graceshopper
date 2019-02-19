@@ -1,13 +1,31 @@
 import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
-import TextField from '@material-ui/core/TextField'
+import {Card, TextField} from '@material-ui/core'
 import StripeCheckout from 'react-stripe-checkout'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
 import {clearCart, handleGuestCheckout, createGuest, clear} from '../store/cart'
 import store from '../store'
 import history from '../history'
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
+  card: {
+    width: '70%',
+    margin: 'auto'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  textInput: {
+    marginLeft: theme.spacing.unit * 5,
+    marginRight: theme.spacing.unit * 5,
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
+  }
+})
 
 class Form extends Component {
   constructor(props) {
@@ -15,19 +33,23 @@ class Form extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
-      email: this.props.user.email || '',
+      email: '',
       firstName: '',
       lastName: '',
-      address: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
       id: null
     }
   }
 
-  async componentDidMount() {
-    const res = await this.props.me()
-    const user = res.user
+  componentDidMount() {
+    const {user} = this.props
     this.setState({
       email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       id: user.id
     })
   }
@@ -36,7 +58,14 @@ class Form extends Component {
       this.props.cart.forEach(async puppyId => {
         await this.props.sellPuppy(puppyId, this.props.user.id, true, token.id)
       })
-      await this.props.updateUserDatabase(this.state)
+      await this.props.updateUserDatabase({
+        email: this.state.email,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        address: `${this.state.street} ${this.state.city}, ${
+          this.state.state
+        } ${this.state.zip}`
+      })
       await this.props.clearCart()
       history.push('/home')
     } else {
@@ -62,67 +91,104 @@ class Form extends Component {
   }
 
   render() {
+    const {classes} = this.props
     return (
-      <div>
-        <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-          <div
-            style={{backgroundColor: 'white', marginTop: 10}}
-            className="form"
+      <Card className={classes.card}>
+        <form
+          className={classes.form}
+          noValidate
+          autoComplete="off"
+          onSubmit={this.handleSubmit}
+        >
+          <TextField
+            required
+            className={classes.textInput}
+            label="First Name"
+            placeholder="First Name"
+            margin="dense"
+            value={this.state.firstName}
+            onChange={this.handleChange}
+            name="firstName"
+          />
+          <TextField
+            required
+            className={classes.textInput}
+            label="Last Name"
+            placeholder="Last Name"
+            margin="dense"
+            value={this.state.lastName}
+            onChange={this.handleChange}
+            name="lastName"
+          />
+
+          <TextField
+            required
+            className={classes.textInput}
+            label="Email"
+            placeholder="Email"
+            margin="dense"
+            value={this.state.email}
+            onChange={this.handleChange}
+            name="email"
+          />
+
+          <TextField
+            required
+            className={classes.textInput}
+            label="Street Address"
+            placeholder="Street Address"
+            margin="dense"
+            value={this.state.street}
+            onChange={this.handleChange}
+            name="street"
+          />
+
+          <TextField
+            required
+            className={classes.textInput}
+            label="City"
+            placeholder="City"
+            margin="dense"
+            value={this.state.city}
+            onChange={this.handleChange}
+            name="city"
+          />
+
+          <TextField
+            required
+            className={classes.textInput}
+            label="State"
+            placeholder="State"
+            margin="dense"
+            value={this.state.state}
+            onChange={this.handleChange}
+            name="state"
+          />
+
+          <TextField
+            required
+            className={classes.textInput}
+            label="Zip Code"
+            placeholder="Zip Code"
+            margin="dense"
+            value={this.state.zip}
+            onChange={this.handleChange}
+            name="zip"
+          />
+
+          <StripeCheckout
+            stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
+            token={this.onToken}
+            email={this.state.email}
+            address_line1={this.state.address}
+            amount={this.props.total * 100}
           >
-            <TextField
-              required={true}
-              id="required"
-              label="Required"
-              placeholder="First Name"
-              margin="normal"
-              onChange={this.handleChange}
-              name="firstName"
-            />
-            <TextField
-              required={true}
-              id="required"
-              label="Required"
-              placeholder="Last Name"
-              margin="normal"
-              onChange={this.handleChange}
-              name="lastName"
-            />
-            {!this.props.user.email && (
-              <TextField
-                required={true}
-                id="required"
-                label="Required"
-                placeholder="Email"
-                margin="normal"
-                onChange={this.handleChange}
-                name="email"
-              />
-            )}
-            <TextField
-              required={true}
-              id="required"
-              label="Required"
-              placeholder="Address"
-              margin="normal"
-              onChange={this.handleChange}
-              name="address"
-            />
-          </div>
-          <div>
-            <StripeCheckout
-              stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
-              token={this.onToken}
-              email={this.state.email}
-              address_line1={this.state.address}
-              amount={this.props.total * 100}
-            >
-              <Button variant="contained" color="primary" type="submit">
-                Complete checkout
-              </Button>
-            </StripeCheckout>
-          </div>
+            <Button variant="contained" color="primary" type="submit">
+              Complete checkout
+            </Button>
+          </StripeCheckout>
         </form>
-      </div>
+      </Card>
     )
   }
 }
@@ -165,4 +231,9 @@ const mapDispatch = dispatch => ({
   createGuest: guestInfo => dispatch(createGuest(guestInfo))
 })
 
-export const ConnectedForm = connect(mapState, mapDispatch)(Form)
+export default withStyles(styles)(
+  connect(
+    mapState,
+    mapDispatch
+  )(Form)
+)

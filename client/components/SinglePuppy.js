@@ -1,19 +1,23 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSinglePuppy} from '../store/puppy'
-import IconButton from '@material-ui/core/IconButton'
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
-import Typography from '@material-ui/core/Typography'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import DeleteIcon from '@material-ui/icons/Delete'
+import {
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Divider,
+  IconButton,
+  CircularProgress
+} from '@material-ui/core'
+import {AddShoppingCart, RemoveShoppingCart} from '@material-ui/icons'
 import store from '../store'
 import {addItem, removeItem, updateCart} from '../store/cart'
-import Divider from '@material-ui/core/Divider'
-const style = {
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
   progress: {
     display: 'block',
     marginLeft: 'auto',
@@ -21,10 +25,17 @@ const style = {
     marginTop: '10%'
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%'
+    height: 350,
+    objectFit: 'cover'
+  },
+  card: {
+    width: '90%',
+    margin: 'auto'
+  },
+  item: {
+    width: '100%'
   }
-}
+})
 
 class SinglePuppy extends Component {
   constructor() {
@@ -59,55 +70,59 @@ class SinglePuppy extends Component {
   }
 
   render() {
-    const props = this.props
-    return !props.puppy ? (
-      <CircularProgress size={100} style={style.progress} />
+    const {classes, puppy} = this.props
+    return !puppy ? (
+      <CircularProgress size={50} />
     ) : (
-      <Card className="form" style={{marginTop: 10, alignContent: 'center'}}>
-        <CardMedia
-          style={style.media}
-          image={props.puppy.imageURL}
-          title={props.puppy.name}
-          className="form"
-        />
-        <CardContent align="left">
-          <Typography variant="display2">{props.puppy.name}</Typography>
-          <Typography variant="caption">{props.puppy.description}</Typography>
-          <Typography component="p">
-            Age: {props.puppy.age}
-            <br />
-            Breed: {props.puppy.breed}
-            <br />
-            Price: ${props.puppy.price}
-            <br />
-            Gender: {props.puppy.gender}
-          </Typography>
-        </CardContent>
-        <Divider />
-        <CardActions>
+      <Grid
+        container
+        component={Card}
+        direction="column"
+        className={classes.card}
+      >
+        <Grid item md={10} container direction="row" alignItems="center">
+          <Grid
+            item
+            md={6}
+            component={CardMedia}
+            image={puppy.imageURL}
+            title={puppy.name}
+            className={classes.media}
+          />
+          <Grid item md={6} component={CardContent}>
+            <Typography variant="headline">{puppy.name}</Typography>
+            <Typography gutterBottom variant="subheading">
+              {puppy.description}
+            </Typography>
+            <Divider />
+            <Typography>Age: {puppy.age}</Typography>
+            <Typography>Breed: {puppy.breed}</Typography>
+            <Typography>Price: {puppy.price}</Typography>
+            <Typography>Gender: {puppy.gender}</Typography>
+          </Grid>
+        </Grid>
+        <Grid item md={2} component={CardActions}>
           {!this.state.isDisabled ? (
             <IconButton
+              component={AddShoppingCart}
               color="primary"
               aria-label="Add to shopping cart"
               onClick={() => {
-                this.addToCart(props.puppy.id)
+                this.addToCart(puppy.id)
               }}
-            >
-              <AddShoppingCartIcon />
-            </IconButton>
+            />
           ) : (
             <IconButton
+              component={RemoveShoppingCart}
               aria-label="Delete"
               color="primary"
               onClick={() => {
-                this.removeFromCart(props.puppy.id)
+                this.removeFromCart(puppy.id)
               }}
-            >
-              <DeleteIcon />
-            </IconButton>
+            />
           )}
-        </CardActions>
-      </Card>
+        </Grid>
+      </Grid>
     )
   }
 }
@@ -127,5 +142,9 @@ const mapDispatch = (dispatch, ownProps) => ({
     dispatch(fetchSinglePuppy(Number(ownProps.match.params.puppyId))),
   updateCart: cart => dispatch(updateCart(cart))
 })
-const connectedSinglePuppy = connect(mapState, mapDispatch)(SinglePuppy)
-export default connectedSinglePuppy
+export default withStyles(styles)(
+  connect(
+    mapState,
+    mapDispatch
+  )(SinglePuppy)
+)

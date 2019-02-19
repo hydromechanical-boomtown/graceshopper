@@ -2,8 +2,14 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, Cart, ConnectedForm} from './components'
-import PuppyList from './components/PuppyList'
+import {
+  Login,
+  Signup,
+  UserHome,
+  Cart,
+  CheckoutForm,
+  Puppies
+} from './components'
 import {me} from './store'
 import SinglePuppy from './components/SinglePuppy'
 import GuestOrderHistory from './components/GuestOrderHistory'
@@ -25,9 +31,9 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route exact path="/cart" component={Cart} />
-        <Route exact path="/puppies" component={PuppyList} />
+        <Route exact path="/puppies" component={Puppies} />
         <Route exact path="/puppies/:puppyId" component={SinglePuppy} />
-        <Route exact path="/cart/checkout" component={ConnectedForm} />
+        <Route exact path="/cart/checkout" component={CheckoutForm} />
         <Route
           exact
           path="/cart/checkout/guest"
@@ -67,7 +73,12 @@ const mapDispatch = dispatch => {
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(mapState, mapDispatch)(Routes))
+export default withRouter(
+  connect(
+    mapState,
+    mapDispatch
+  )(Routes)
+)
 
 /**
  * PROP TYPES

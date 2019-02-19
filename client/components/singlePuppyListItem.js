@@ -1,16 +1,33 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import IconButton from '@material-ui/core/IconButton'
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
+import {
+  IconButton,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardMedia,
+  CardContent,
+  Button,
+  Typography
+} from '@material-ui/core'
+import {AddShoppingCart, RemoveShoppingCart} from '@material-ui/icons'
 import {connect} from 'react-redux'
 import {addItem, removeItem, updateCart} from '../store/cart'
 import store from '../store'
-import DeleteIcon from '@material-ui/icons/Delete'
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
+  card: {
+    maxWidth: 350,
+    paddingLeft: theme.spacing.unit * 0.5,
+    paddingRight: theme.spacing.unit * 0.5,
+    paddingTop: theme.spacing.unit * 0.5
+  },
+  media: {
+    height: 200,
+    objectFit: 'cover'
+  }
+})
 
 class SinglePuppyListItemUnconnected extends Component {
   constructor() {
@@ -45,47 +62,55 @@ class SinglePuppyListItemUnconnected extends Component {
   }
 
   render() {
+    const {classes, puppy} = this.props
     return (
-      <Card>
-        <Link to={`/puppies/${this.props.puppy.id}`}>
-          <img src={this.props.puppy.imageURL} className="imageSize" />
-        </Link>
-        {/* <CardMedia image="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Puppy_on_Halong_Bay.jpg/281px-Puppy_on_Halong_Bay.jpg" /> */}
-        <CardContent>
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            component="img"
+            image={puppy.imageURL}
+            title={puppy.name}
+          />
           <Typography gutterBottom variant="headline" component="h2">
-            {this.props.puppy.name}
+            {puppy.name}
           </Typography>
-          <Typography component="p">Breed: {this.props.puppy.breed}</Typography>
-          <Typography component="p">Age: {this.props.puppy.age}</Typography>
-          <Typography component="p">Price: {this.props.puppy.price}</Typography>
+        </CardActionArea>
+        <CardContent>
+          <Typography component="p">Breed: {puppy.breed}</Typography>
+          <Typography component="p">Age: {puppy.age}</Typography>
+          <Typography component="p">Price: {puppy.price}</Typography>
         </CardContent>
         <CardActions>
-          {!this.state.isDisabled ? (
-            <IconButton
-              color="primary"
-              aria-label="Add to shopping cart"
-              onClick={() => {
-                this.addToCart(this.props.puppy.id)
-              }}
-            >
-              <AddShoppingCartIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              aria-label="Delete"
-              color="primary"
-              onClick={() => {
-                this.removeFromCart(this.props.puppy.id)
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          )}
-          <Link to={`/puppies/${this.props.puppy.id}`}>
-            <Button size="small" color="primary">
-              See More
-            </Button>
-          </Link>
+          {!puppy.userId &&
+            (!this.state.isDisabled ? (
+              <IconButton
+                component={AddShoppingCart}
+                color="primary"
+                aria-label="Add to shopping cart"
+                onClick={() => {
+                  this.addToCart(puppy.id)
+                }}
+              />
+            ) : (
+              <IconButton
+                component={RemoveShoppingCart}
+                aria-label="Delete"
+                color="primary"
+                onClick={() => {
+                  this.removeFromCart(puppy.id)
+                }}
+              />
+            ))}
+
+          <Button
+            component={Link}
+            to={`/puppies/${puppy.id}`}
+            size="small"
+            color="primary"
+          >
+            More Info
+          </Button>
         </CardActions>
       </Card>
     )
@@ -100,7 +125,10 @@ const mapDispatch = dispatch => ({
   updateCart: cart => dispatch(updateCart(cart))
 })
 
-const SinglePuppyListItem = connect(mapState, mapDispatch)(
-  SinglePuppyListItemUnconnected
+const SinglePuppyListItem = withStyles(styles)(
+  connect(
+    mapState,
+    mapDispatch
+  )(SinglePuppyListItemUnconnected)
 )
 export default SinglePuppyListItem

@@ -2,50 +2,47 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchPuppies} from '../store/puppy'
 import SinglePuppyListItem from './singlePuppyListItem'
-import CircularProgress from '@material-ui/core/CircularProgress'
-const style = {
+import {CircularProgress, Grid} from '@material-ui/core'
+import {withStyles} from '@material-ui/core/styles'
+
+const styles = theme => ({
   progress: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '10%'
+    margin: 'auto'
   },
   media: {
     height: 0,
     paddingTop: '56.25%'
+  },
+  container: {
+    marginLeft: theme.spacing.unit * 2.5,
+    marginRight: theme.spacing.unit * 2.5,
+    paddingTop: theme.spacing.unit
+  },
+  item: {
+    marginBottom: theme.spacing.unit
   }
-}
-
-class PuppyList extends Component {
-  componentDidMount() {
-    this.props.fetchPuppies()
-  }
-
-  render() {
-    return !this.props.puppies ? (<CircularProgress size={100} style={style.progress} />)
-    :(
-      <div>
-        <ul className="container" style={{alignContent: 'center'}}>
-          {this.props.puppies.map(puppy => {
-            return (
-              <li key={puppy.id} className="child">
-                <SinglePuppyListItem puppy={puppy} />
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-    )
-  }
-}
-
-const mapState = state => ({
-  puppies: state.puppies
 })
 
-const mapDispatch = dispatch => ({
-  fetchPuppies: () => dispatch(fetchPuppies())
-})
+const PuppyList = props => {
+  const {classes, puppies} = props
+  return (
+    <Grid container direction="row" className={classes.container}>
+      {puppies.map(puppy => {
+        return (
+          <Grid
+            item
+            key={puppy.id}
+            md={4}
+            sm={6}
+            xs={12}
+            className={classes.item}
+          >
+            <SinglePuppyListItem puppy={puppy} />
+          </Grid>
+        )
+      })}
+    </Grid>
+  )
+}
 
-const ConnectedPuppyList = connect(mapState, mapDispatch)(PuppyList)
-export default ConnectedPuppyList
+export default withStyles(styles)(PuppyList)
