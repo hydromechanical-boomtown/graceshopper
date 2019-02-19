@@ -78,8 +78,8 @@ const AuthForm = props => {
           <div>
             <Typography>{displayName} With</Typography>
             <IconButton component={Google} />
-            <IconButton component={GithubCircle} />
-            <IconButton component={TwitterCircle} />
+            {/* <IconButton component={GithubCircle} />
+            <IconButton component={TwitterCircle} /> */}
           </div>
           <Button
             className={classes.loginBtn}
