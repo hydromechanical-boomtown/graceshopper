@@ -42,6 +42,10 @@ const styles = theme => ({
   },
   loginBtn: {
     height: '2.5em'
+  },
+  error: {
+    textAlign: 'center',
+    color: theme.palette.error.main
   }
 })
 
@@ -63,6 +67,7 @@ const AuthForm = props => {
           variant="outlined"
           margin="dense"
           error={error}
+          required
         />
         <TextField
           className={classes.textInput}
@@ -73,9 +78,12 @@ const AuthForm = props => {
           variant="outlined"
           margin="dense"
           error={error}
+          required
         />
         {error && error.response && (
-          <Typography> {error.response.data} </Typography>
+          <Typography className={classes.error}>
+            {error.response.data}
+          </Typography>
         )}
         <div className={classes.buttonsContainer}>
           <div>
