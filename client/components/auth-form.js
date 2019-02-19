@@ -7,7 +7,9 @@ import {
   Card,
   TextField,
   Typography,
-  IconButton
+  IconButton,
+  Link,
+  Icon
 } from '@material-ui/core/'
 import {Google, GithubCircle, TwitterCircle} from 'mdi-material-ui'
 import {withStyles} from '@material-ui/core/styles'
@@ -55,6 +57,7 @@ const AuthForm = props => {
         <TextField
           className={classes.textInput}
           id="email"
+          type="email"
           label="Email"
           name="email"
           variant="outlined"
@@ -77,7 +80,7 @@ const AuthForm = props => {
         <div className={classes.buttonsContainer}>
           <div>
             <Typography>{displayName} With</Typography>
-            <IconButton component={Google} />
+            <IconButton to="/auth/google" component={Google} />
             {/* <IconButton component={GithubCircle} />
             <IconButton component={TwitterCircle} /> */}
           </div>
