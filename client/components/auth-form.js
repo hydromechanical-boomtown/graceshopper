@@ -86,12 +86,13 @@ const AuthForm = props => {
           </Typography>
         )}
         <div className={classes.buttonsContainer}>
-          <div>
+          {/* <div>
             <Typography>{displayName} With</Typography>
             <IconButton to="/auth/google" component={Google} />
             {/* <IconButton component={GithubCircle} />
-            <IconButton component={TwitterCircle} /> */}
-          </div>
+            <IconButton component={TwitterCircle} /> */}{' '}
+          {/* */}
+          {/* </div> */}
           <Button
             className={classes.loginBtn}
             variant="contained"
