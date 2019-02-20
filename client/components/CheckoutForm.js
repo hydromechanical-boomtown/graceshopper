@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
 import {Card, TextField} from '@material-ui/core'
-import StripeCheckout from 'react-stripe-checkout'
 import {sellPuppy} from '../store/puppy'
 import {updateUserDatabase, me} from '../store/user'
-import {clearCart, handleGuestCheckout, createGuest, clear} from '../store/cart'
-import store from '../store'
+import {clearCart, handleGuestCheckout, createGuest} from '../store/cart'
 import history from '../history'
 import {withStyles} from '@material-ui/core/styles'
+import {CardElement, injectStripe} from 'react-stripe-elements'
+import axios from 'axios'
 
 const styles = theme => ({
   card: {
@@ -86,20 +86,27 @@ class Form extends Component {
     })
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
+    try {
+      const {total, stripe} = this.props
+      let {token} = await stripe.createToken({
+        email: this.state.email
+      })
+      let res = axios.post('/api/checkout', {amount: total, token})
+
+      if (res.ok) console.log('SUCCESS')
+      await this.onToken(token)
+    } catch (err) {
+      throw err
+    }
   }
 
   render() {
     const {classes} = this.props
     return (
       <Card className={classes.card}>
-        <form
-          className={classes.form}
-          noValidate
-          autoComplete="off"
-          onSubmit={this.handleSubmit}
-        >
+        <form className={classes.form} onSubmit={this.handleSubmit}>
           <TextField
             required
             className={classes.textInput}
@@ -175,18 +182,10 @@ class Form extends Component {
             onChange={this.handleChange}
             name="zip"
           />
-
-          <StripeCheckout
-            stripeKey="pk_test_cBSjAsw49UTK7TvSOl2zpeYu"
-            token={this.onToken}
-            email={this.state.email}
-            address_line1={this.state.address}
-            amount={this.props.total * 100}
-          >
-            <Button variant="contained" color="primary" type="submit">
-              Complete checkout
-            </Button>
-          </StripeCheckout>
+          <CardElement className={classes.textInput} />
+          <Button variant="contained" color="primary" type="submit">
+            Complete checkout
+          </Button>
         </form>
       </Card>
     )
@@ -231,9 +230,11 @@ const mapDispatch = dispatch => ({
   createGuest: guestInfo => dispatch(createGuest(guestInfo))
 })
 
-export default withStyles(styles)(
-  connect(
-    mapState,
-    mapDispatch
-  )(Form)
+export default injectStripe(
+  withStyles(styles)(
+    connect(
+      mapState,
+      mapDispatch
+    )(Form)
+  )
 )

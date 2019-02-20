@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
+import {Elements} from 'react-stripe-elements'
 import PropTypes from 'prop-types'
 import {
   Login,
@@ -33,7 +34,15 @@ class Routes extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/puppies" component={Puppies} />
         <Route exact path="/puppies/:puppyId" component={SinglePuppy} />
-        <Route exact path="/cart/checkout" component={CheckoutForm} />
+        <Route
+          exact
+          path="/cart/checkout"
+          render={() => (
+            <Elements>
+              <CheckoutForm />
+            </Elements>
+          )}
+        />
         <Route
           exact
           path="/cart/checkout/guest"
