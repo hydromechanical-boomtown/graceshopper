@@ -12,6 +12,12 @@ const app = express()
 const socketio = require('socket.io')
 module.exports = app
 
+const {STRIPE_SECRET_KEY} = require('../secrets')
+
+const stripe = require('stripe')(
+  process.env.STRIPE_SECRET_KEY || STRIPE_SECRET_KEY
+)
+
 // This is a global Mocha hook, used for resource cleanup.
 // Otherwise, Mocha v4+ never quits after tests.
 if (process.env.NODE_ENV === 'test') {
