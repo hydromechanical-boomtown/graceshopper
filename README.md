@@ -1,80 +1,60 @@
-# Boilermaker
+# Puppers
 
-_Good things come in pairs_
+Adopt a pup and give a dog a home.
 
-Looking to mix up a backend with express/sequelize and a frontend with react/redux? That's `boilermaker`!
+## Getting Started
 
-Follow along with the workshop to make your own! This canonical version can serve as a reference, or a starting point all on its own.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Setup
+### Prerequisites
 
-To use this boilerplate, you'll need to take the following steps:
+To run this project you must have [node](https://nodejs.org/en/) and [postgreSQL](https://www.postgresql.org/docs/9.3/tutorial-install.html) installed
 
-* Don't fork or clone this repo! Instead, create a new, empty directory on your machine and `git init` (or create an empty repo on Github and clone it to your local machine)
-* Run the following commands:
+### Installing
 
-```
-git remote add boilermaker https://github.com/FullstackAcademy/boilermaker.git
-git fetch boilermaker
-git merge boilermaker/master
-```
+A step by step instructions on how to get a development env running
 
-Why did we do that? Because every once in a while, `boilermaker` may be updated with additional features or bug fixes, and you can easily get those changes from now on by entering:
+Clone git repo
 
 ```
-git fetch boilermaker
-git merge boilermaker/master
+git clone https://github.com/hydromechanical-boomtown/graceshopper.git
 ```
 
-## Customize
+Create Postgres database
 
-Now that you've got the code, follow these steps to get acclimated:
+```
+createdb puppers
+```
 
-* Update project name and description in `package.json` and `.travis.yml` files
-* `npm install`, or `yarn install` - whatever you're into
-* Create two postgres databases: `boilermaker` and `boilermaker-test` (you can substitute these with the name of your own application - just be sure to go through and change the `package.json` and `.travis.yml` to refer to the new name)
-  * By default, running `npm test` will use `boilermaker-test`, while regular development uses `boilermaker`
-* Create a file called `secrets.js` in the project root
+Install packages and seed database
 
-  * This file is `.gitignore`'d, and will _only_ be required in your _development_ environment
-  * Its purpose is to attach the secret env variables that you'll use while developing
-  * However, it's **very** important that you **not** push it to Github! Otherwise, _prying eyes_ will find your secret API keys!
-  * It might look like this:
+```
+npm install
+npm run seed
+```
 
-  ```
-    process.env.GOOGLE_CLIENT_ID = 'hush hush'
-    process.env.GOOGLE_CLIENT_SECRET = 'pretty secret'
-    process.env.GOOGLE_CALLBACK = '/auth/google/callback'
-  ```
+Start dev server
 
-* To use OAuth with Google, complete the step above with a real client ID and client secret from Google
-  * You can get them here: https://console.developers.google.com/apis/credentials
-* Finally, complete the section below to set up your linter
-
-## Linting
-
-Linters are fundamental to any project - they ensure that your code has a consistent style, which is critical to writing readable code.
-
-Boilermaker comes with a working linter (ESLint, with `eslint-config-fullstack`) "out of the box." However, everyone has their own style, so we recommend that you and your team work out yours and stick to it. Any linter rule that you object to can be "turned off" in `.eslintrc.json`. You may also choose an entirely different config if you don't like ours:
-
-* [Standard style guide](https://standardjs.com/)
-* [Airbnb style guide](https://github.com/airbnb/javascript)
-* [Google style guide](https://google.github.io/styleguide/jsguide.html)
-
-## Start
-
-`npm run start-dev` will make great things happen!
+```
+npm run start-dev
+```
 
 If you want to run the server and/or webpack separately, you can also `npm run start-server` and `npm run build-client`.
 
-From there, just follow your bliss.
+## Running the tests
+
+To run tests
+
+```
+npm test
+```
 
 ## Deployment
 
 Ready to go world wide? Here's a guide to deployment! There are two (compatible) ways to deploy:
 
-* automatically, via continuous integration
-* manually, from your local machine
+- automatically, via continuous integration
+- manually, from your local machine
 
 Either way, you'll need to set up your deployment server to start:
 
@@ -84,12 +64,12 @@ Either way, you'll need to set up your deployment server to start:
 2.  `heroku login`
 3.  Add a git remote for heroku:
 
-* **If you're creating a new app...**
+- **If you're creating a new app...**
 
   1.  `heroku create` or `heroku create your-app-name` if you have a name in mind.
   2.  `heroku addons:create heroku-postgresql:hobby-dev` to add ("provision") a postgres database to your heroku dyno
 
-* **If you already have a Heroku app...**
+- **If you already have a Heroku app...**
 
   1.  `heroku git:remote your-app-name` You'll need to be a collaborator on the app.
 
@@ -120,14 +100,12 @@ Some developers may prefer to control deployment rather than rely on automation.
 2.  If you currently have an existing branch called "deploy", delete it now (`git branch -d deploy`). We're going to use a dummy branch with the name "deploy" (see below), so if you have one lying around, the script below will error
 3.  `npm run deploy` - this will cause the following commands to happen in order:
 
-* `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
-* `webpack -p`: webpack will run in "production mode"
-* `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
-* `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
-* `git push --force heroku deploy:master`: push your local "deploy" branch to the "master" branch on heroku
-* `git checkout master`: return to your master branch
-* `git branch -D deploy`: remove the deploy branch
+- `git checkout -b deploy`: checks out a new branch called "deploy". Note that the name "deploy" here isn't magical, but it needs to match the name of the branch we specify when we push to our heroku remote.
+- `webpack -p`: webpack will run in "production mode"
+- `git add -f public/bundle.js public/bundle.js.map`: "force" add the otherwise gitignored build files
+- `git commit --allow-empty -m 'Deploying'`: create a commit, even if nothing changed
+- `git push --force heroku deploy:master`: push your local "deploy" branch to the "master" branch on heroku
+- `git checkout master`: return to your master branch
+- `git branch -D deploy`: remove the deploy branch
 
 Now, you should be deployed!
-
-Why do all of these steps? The big reason is because we don't want our production server to be cluttered up with dev dependencies like webpack, but at the same time we don't want our development git-tracking to be cluttered with production build files like bundle.js! By doing these steps, we make sure our development and production environments both stay nice and clean!
